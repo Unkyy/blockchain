@@ -5,11 +5,13 @@ services:
     volumes:
       - ".:/usr/src/app/"
     command: npm start
+    ports:
+      - "9000:9000"
   mongodb:
     image: "mongo"
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: halgo
+      MONGODB_USERNAME: root
+      MONGO_PASSWORD: root
+      MONGO_DATABASE: halgo
