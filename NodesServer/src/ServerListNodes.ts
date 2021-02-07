@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const {MongoClient} = require('mongodb');
-const url = 'mongodb://root:root@localhost:27017';
+const url = 'mongodb://root:root@mongodb:27017';
 const dbName = 'halgo';
 let db: any;
 let nodes: any;

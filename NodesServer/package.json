@@ -5,19 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/src/node.js\""
+    "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/ServerListNodes.js\""
   },
   "author": "Hugo Alberola",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^5.3.0",
-    "crypto-js": "^4.0.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.3",
-    "nodemon": "^2.0.7",
-    "peer": "^0.6.1",
-    "socket.io": "^3.1.0",
-    "socket.io-p2p-server": "^1.2.0"
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {
     "@types/express": "^4.16.1",
