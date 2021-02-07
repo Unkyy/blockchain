@@ -1,12 +1,24 @@
 version: "3.8"
 services:
+  nodeserver:
+    build: ./docker/node
+    ports:
+      - "9000:9000"
+    volumes:
+      - "./NodesServer:/usr/src/app/"
+    depends_on:
+      - mongodb
+    command: npm start
+    #command: tail -f /dev/null
   node:
     build: ./docker/node
     volumes:
-      - ".:/usr/src/app/"
-    command: npm start
-    ports:
-      - "9000:9000"
+      - "./Node:/usr/src/app/"
+    depends_on:
+      - nodeserver
+    deploy:
+      replicas: 2
+    command:  npm start
   mongodb:
     image: "mongo"
     ports:
