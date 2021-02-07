@@ -56,6 +56,7 @@ app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, func
             case 0: return [4 /*yield*/, nodes.insertOne(req.body)];
             case 1:
                 result = _a.sent();
+                console.log("djedjeidjeidjeidjei");
                 nodes.find({}).toArray(function (err, nodes) {
                     if (err)
                         throw err;

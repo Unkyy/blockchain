@@ -1,24 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var SendIPv4_1 = require("./models/SendIPv4");
 var http = require('http');
-var networkInterfaces = require('os').networkInterfaces;
-var nets = networkInterfaces();
-var results = Object.create(null); // Or just '{}', an empty object
-for (var _i = 0, _a = Object.keys(nets); _i < _a.length; _i++) {
-    var name_1 = _a[_i];
-    for (var _b = 0, _c = nets[name_1]; _b < _c.length; _b++) {
-        var net = _c[_b];
-        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-        if (net.family === 'IPv4' && !net.internal) {
-            if (!results[name_1]) {
-                results[name_1] = [];
-            }
-            results[name_1].push(net);
-        }
-    }
-}
+var tetetee = new SendIPv4_1.SendIPv4();
+tetetee.send();
 var Serveur = /** @class */ (function () {
     function Serveur(port) {
         this.port = port;
+        console.log('dede');
     }
     Serveur.prototype.launch = function () {
         http.createServer(function (req, res) {
@@ -30,7 +19,6 @@ var Serveur = /** @class */ (function () {
                 var data = JSON.parse(Buffer.concat(body).toString());
                 console.log(data);
                 console.log(data.origin);
-                console.log(results);
                 res.end();
             })
                 .on('close', function () { });
@@ -40,4 +28,4 @@ var Serveur = /** @class */ (function () {
     };
     return Serveur;
 }());
-var test = new Serveur(5000).launch();
+//const test = new Serveur(5000).launch();

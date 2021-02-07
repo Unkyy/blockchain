@@ -3,7 +3,7 @@ services:
   nodeserver:
     build: ./docker/node
     ports:
-      - "9000:9000"
+      - "9001:9001"
     volumes:
       - "./NodesServer:/usr/src/app/"
     depends_on:
@@ -17,8 +17,8 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 2
-    command:  npm start
+      replicas: 10
+    command: npm start
   mongodb:
     image: "mongo"
     ports:

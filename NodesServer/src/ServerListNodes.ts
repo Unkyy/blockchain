@@ -17,10 +17,10 @@ MongoClient.connect(url, function(err: any, client: any) {
 
 app.post('/',async (req: any, res: any) => {
     const result = await nodes.insertOne(req.body);
+    console.log("djedjeidjeidjeidjei")
     nodes.find({}).toArray(function(err:any, nodes:any) {
         if (err) throw err;
         res.send(nodes);
     });
 })
-
 app.listen(9001);

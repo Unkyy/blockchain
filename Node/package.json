@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/src/node.js\""
+    "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/node.js\""
   },
   "author": "Hugo Alberola",
   "license": "ISC",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.1",
+    "ts-node": "^9.1.1",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   }

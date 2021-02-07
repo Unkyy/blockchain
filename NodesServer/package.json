@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "approd": "node dist/ServerListNodes.js",
     "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/ServerListNodes.js\""
   },
   "author": "Hugo Alberola",

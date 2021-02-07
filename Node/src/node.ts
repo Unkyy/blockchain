@@ -1,28 +1,18 @@
+import { SendIPv4 } from "./models/SendIPv4";
 let http = require('http');
-const { networkInterfaces } = require('os');
 
-const nets = networkInterfaces();
-const results = Object.create(null); // Or just '{}', an empty object
-
-
-for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-        if (net.family === 'IPv4' && !net.internal) {
-            if (!results[name]) {
-                results[name] = [];
-            }
-            results[name].push(net);
-        }
-    }
-}
+let tetetee = new SendIPv4()
+tetetee.send()
 
 class Serveur{
 
     port: number
     constructor(port:number, ){
         this.port = port;
+
+        console.log('dede')
     }
+    
     launch(){
         http.createServer((req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*')
@@ -33,7 +23,6 @@ class Serveur{
                     let data = JSON.parse(Buffer.concat(body).toString());
                     console.log(data);
                     console.log(data.origin);
-                    console.log(results);
                     res.end()
                 })
                 .on('close',() => {})        
@@ -43,4 +32,4 @@ class Serveur{
     }
 }
  
-const test = new Serveur(5000).launch();
+//const test = new Serveur(5000).launch();
