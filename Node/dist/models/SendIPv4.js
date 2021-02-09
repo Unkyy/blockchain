@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var NodeServerConnection_1 = require("../connections/NodeServerConnection");
 var networkInterfaces = require('os').networkInterfaces;
@@ -22,11 +33,13 @@ var SendIPv4 = /** @class */ (function () {
             }
         }
         this.ipv4 = results;
-        console.log("dzdzdzdd");
     }
     SendIPv4.prototype.send = function () {
-        console.log("cjiefciejfiejfeifjeifjefiejifje");
-        this.nodeServeur.send({ todo: 'Buy the mdedededeilk' });
+        var test = __assign({}, this.ipv4);
+        var data = {
+            IP: test.eth0[0].address
+        };
+        this.nodeServeur.send(data);
     };
     return SendIPv4;
 }());

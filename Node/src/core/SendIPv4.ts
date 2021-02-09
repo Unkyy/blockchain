@@ -1,4 +1,5 @@
 import { NodeServerConnection } from "../connections/NodeServerConnection";
+import { PeerList } from "./PeersList";
 
 const { networkInterfaces } = require('os');
 const nets = networkInterfaces();
@@ -20,10 +21,15 @@ export class SendIPv4 {
             }
         }
        this.ipv4 = results;
-       console.log("dzdzdzdd")
     }
-    send(){
-        console.log("cjiefciejfiejfeifjeifjefiejifje")
-        this.nodeServeur.send({todo: 'Buy the mdedededeilk' })
+    async send(){
+        const test = {...this.ipv4};
+        const data = {
+            IP: test.eth0[0].address
+        };
+        const nodelist = await this.nodeServeur.send(data);
+        return new Promise(res => {
+            res(new PeerList(nodelist));
+        })
     }
 }
