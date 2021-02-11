@@ -5,6 +5,9 @@ var PeerList = /** @class */ (function () {
         this.peers = [];
         this.peers = peers;
     }
+    PeerList.prototype.getPeers = function () {
+        return JSON.parse(this.peers);
+    };
     return PeerList;
 }());
 exports.PeerList = PeerList;

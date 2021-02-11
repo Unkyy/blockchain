@@ -3,4 +3,7 @@ export class PeerList {
     constructor(peers: any){
         this.peers = peers;
     }
+    getPeers(): Array<any> {
+        return JSON.parse(this.peers);
+    }
 }
