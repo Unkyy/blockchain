@@ -5,7 +5,7 @@ const { networkInterfaces } = require('os');
 const nets = networkInterfaces();
 const results = Object.create(null); // Or just '{}', an empty object
 
-export class SendIPv4 {
+export class IPv4 {
     private ipv4 :any = [];
     private nodeServeur:NodeServerConnection = new NodeServerConnection();
     constructor(){
@@ -22,7 +22,7 @@ export class SendIPv4 {
         }
        this.ipv4 = results;
     }
-    async send(){
+    async send(): Promise<any>{
         const test = {...this.ipv4};
         const data = {
             IP: test.eth0[0].address
@@ -31,5 +31,8 @@ export class SendIPv4 {
         return new Promise(res => {
             res(new PeerList(nodelist));
         })
+    }
+    getIp(){
+        return this.ipv4.eth0[0].address;
     }
 }

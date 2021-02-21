@@ -41,26 +41,28 @@ var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://root:root@mongodb:27017';
 var dbName = 'halgo';
 var db;
-var nodes;
+var nodesCollection;
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 MongoClient.connect(url, function (err, client) {
     console.log("Connected successfully to server");
     db = client.db(dbName);
-    nodes = db.collection("nodes");
+    nodesCollection = db.collection("nodes");
 });
 app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var result;
+    var result, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, nodes.insertOne(req.body)];
+            case 0: return [4 /*yield*/, nodesCollection.update(req.body, req.body, { upsert: true })];
             case 1:
                 result = _a.sent();
-                console.log("djedjeidjeidjeidjei");
-                nodes.find({}).toArray(function (err, nodes) {
+                console.log('---------', req.body);
+                data = nodesCollection.find({});
+                //if(data.include())
+                data.toArray(function (err, nodesCollection) {
                     if (err)
                         throw err;
-                    res.send(nodes);
+                    res.send(nodesCollection);
                 });
                 return [2 /*return*/];
         }

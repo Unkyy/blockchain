@@ -17,8 +17,9 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 3
+      replicas: 2
     command: npm start
+
   mongodb:
     image: "mongo"
     ports:

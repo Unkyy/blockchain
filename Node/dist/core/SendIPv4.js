@@ -51,8 +51,8 @@ var PeersList_1 = require("./PeersList");
 var networkInterfaces = require('os').networkInterfaces;
 var nets = networkInterfaces();
 var results = Object.create(null); // Or just '{}', an empty object
-var SendIPv4 = /** @class */ (function () {
-    function SendIPv4() {
+var IPv4 = /** @class */ (function () {
+    function IPv4() {
         this.ipv4 = [];
         this.nodeServeur = new NodeServerConnection_1.NodeServerConnection();
         for (var _i = 0, _a = Object.keys(nets); _i < _a.length; _i++) {
@@ -70,7 +70,7 @@ var SendIPv4 = /** @class */ (function () {
         }
         this.ipv4 = results;
     }
-    SendIPv4.prototype.send = function () {
+    IPv4.prototype.send = function () {
         return __awaiter(this, void 0, void 0, function () {
             var test, data, nodelist;
             return __generator(this, function (_a) {
@@ -90,6 +90,9 @@ var SendIPv4 = /** @class */ (function () {
             });
         });
     };
-    return SendIPv4;
+    IPv4.prototype.getIp = function () {
+        return this.ipv4;
+    };
+    return IPv4;
 }());
-exports.SendIPv4 = SendIPv4;
+exports.IPv4 = IPv4;

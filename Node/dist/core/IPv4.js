@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -35,51 +46,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var IPv4_1 = require("./IPv4");
-var http = require('http');
-var Client = /** @class */ (function () {
-    function Client(peerList) {
-        this.peerList = peerList;
+var NodeServerConnection_1 = require("../connections/NodeServerConnection");
+var PeersList_1 = require("./PeersList");
+var networkInterfaces = require('os').networkInterfaces;
+var nets = networkInterfaces();
+var results = Object.create(null); // Or just '{}', an empty object
+var IPv4 = /** @class */ (function () {
+    function IPv4() {
+        this.ipv4 = [];
+        this.nodeServeur = new NodeServerConnection_1.NodeServerConnection();
+        for (var _i = 0, _a = Object.keys(nets); _i < _a.length; _i++) {
+            var name_1 = _a[_i];
+            for (var _b = 0, _c = nets[name_1]; _b < _c.length; _b++) {
+                var net = _c[_b];
+                // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+                if (net.family === 'IPv4' && !net.internal) {
+                    if (!results[name_1]) {
+                        results[name_1] = [];
+                    }
+                    results[name_1].push(net);
+                }
+            }
+        }
+        this.ipv4 = results;
     }
-    Client.prototype.connectPeer = function () {
+    IPv4.prototype.send = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var list, connects, ip;
+            var test, data, nodelist;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.peerList];
+                    case 0:
+                        test = __assign({}, this.ipv4);
+                        data = {
+                            IP: test.eth0[0].address
+                        };
+                        return [4 /*yield*/, this.nodeServeur.send(data)];
                     case 1:
-                        list = _a.sent();
-                        connects = list.getPeers().map(function (elem) {
-                            return {
-                                method: "POST",
-                                host: elem.IP,
-                                port: 5000,
-                                headers: {
-                                    "content-type": "application/json",
-                                    "cache-control": "no-cache",
-                                }
-                            };
-                        });
-                        ip = new IPv4_1.IPv4().getIp();
-                        connects = connects.filter(function (elem) { return elem.host != ip; });
-                        setInterval(function () {
-                            connects.forEach(function (options) {
-                                var req = http.request(options, function (req, res) {
-                                    console.log('got connected!');
-                                    req.on('error', function (err) {
-                                        console.log('error: ');
-                                    });
-                                });
-                                //req.writeHead(200, { 'Content-Type': 'application/json' });
-                                req.write(JSON.stringify({ test: 'test' }));
-                                req.end();
-                            });
-                        }, 2000);
-                        return [2 /*return*/];
+                        nodelist = _a.sent();
+                        return [2 /*return*/, new Promise(function (res) {
+                                res(new PeersList_1.PeerList(nodelist));
+                            })];
                 }
             });
         });
     };
-    return Client;
+    IPv4.prototype.getIp = function () {
+        return this.ipv4.eth0[0].address;
+    };
+    return IPv4;
 }());
-exports.Client = Client;
+exports.IPv4 = IPv4;

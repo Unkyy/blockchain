@@ -1,3 +1,4 @@
+import { IPv4 } from "./IPv4";
 import { PeerList } from "./PeersList";
 let http = require('http');
 
@@ -7,32 +8,33 @@ export class Client {
         this.peerList = peerList;
     }
     async connectPeer(){
-        var options = {
-            host: '127.0.0.1',
-            port: 80,
-            path: '/upload',
-            method: 'POST'
-          };
         const list = await this.peerList;
-        console.log('------',typeof list.getPeers())
-        const connects = list.getPeers().map((elem:any) =>{
-            ({
+        let connects = list.getPeers().map((elem:any) =>{
+            return {
+                method: "POST",
                 host: elem.IP,
-                port: 80,
-                path: '/upload',
-                method: 'POST'
-            })
+                port: 5000,
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                }
+            }
         })
-        console.log(connects);
-        /**
-         *  var req = http.request(options, (res:any) => {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', (chunk: any) => {
-              console.log('BODY: ' + chunk);
-            });
-          });
-         */
+        const ip = new IPv4().getIp()
+        connects = connects.filter(elem => elem.host != ip)
+
+        setInterval(() => {
+            connects.forEach(options => {
+                var req = http.request(options, (req:any,res:any) => {
+                    console.log('got connected!');
+                    req.on('error', (err: any) => {
+                        console.log('error: ');
+                    });                  
+                });
+                //req.writeHead(200, { 'Content-Type': 'application/json' });
+                req.write(JSON.stringify({test: 'test'}));
+                req.end()
+            })
+        }, 2000)
     }
 }
