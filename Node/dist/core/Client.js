@@ -34,11 +34,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var IPv4_1 = require("./IPv4");
-var http = require('http');
+var http = __importStar(require("http"));
 var Client = /** @class */ (function () {
     function Client(peerList) {
+        this.peerConnection = [];
         this.peerList = peerList;
     }
     Client.prototype.connectPeer = function () {
@@ -55,28 +63,47 @@ var Client = /** @class */ (function () {
                                 host: elem.IP,
                                 port: 5000,
                                 headers: {
-                                    "content-type": "application/json",
+                                    'Content-Type': 'application/json',
                                     "cache-control": "no-cache",
+                                    "mode": 'cors',
                                 }
                             };
                         });
                         ip = new IPv4_1.IPv4().getIp();
                         connects = connects.filter(function (elem) { return elem.host != ip; });
-                        setInterval(function () {
-                            connects.forEach(function (options) {
-                                var req = http.request(options, function (req, res) {
-                                    console.log('got connected!');
-                                    req.on('error', function (err) {
-                                        console.log('error: ');
-                                    });
+                        connects.forEach(function (options) {
+                            var req = http.request(options, function (res) {
+                                res.setEncoding('utf8');
+                                res.on('finish', function () {
+                                    console.log('--------------');
                                 });
-                                //req.writeHead(200, { 'Content-Type': 'application/json' });
-                                req.write(JSON.stringify({ test: 'test' }));
-                                req.end();
+                                res.on('data', function (chunk) {
+                                    console.log(chunk.toString());
+                                });
                             });
-                        }, 2000);
-                        return [2 /*return*/];
+                            req.write("dedede");
+                            req.end();
+                            //this.peerConnection.push(req)
+                        });
+                        return [4 /*yield*/, Promise.all(this.peerConnection)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, this];
                 }
+            });
+        });
+    };
+    Client.prototype.updateBlockChain = function (blockChain) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.peerConnection.forEach(function (req) {
+                    console.log(blockChain);
+                    req.write(JSON.stringify(blockChain));
+                    req.on('error', function (err) {
+                        console.log('error : ', err);
+                    });
+                });
+                return [2 /*return*/];
             });
         });
     };

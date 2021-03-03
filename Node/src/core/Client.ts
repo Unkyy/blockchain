@@ -1,9 +1,11 @@
 import { IPv4 } from "./IPv4";
 import { PeerList } from "./PeersList";
-let http = require('http');
+import * as http from 'http';
+
 
 export class Client {
     private peerList: Promise<PeerList>;
+    private peerConnection:any = [];
     constructor(peerList: Promise<PeerList>){
         this.peerList = peerList;
     }
@@ -15,26 +17,39 @@ export class Client {
                 host: elem.IP,
                 port: 5000,
                 headers: {
-                    "content-type": "application/json",
-                    "cache-control": "no-cache",
+                    'Content-Type': 'application/json',
+                    "cache-control": "no-cache",       
+                    "mode": 'cors',
                 }
             }
         })
         const ip = new IPv4().getIp()
         connects = connects.filter(elem => elem.host != ip)
 
-        setInterval(() => {
-            connects.forEach(options => {
-                var req = http.request(options, (req:any,res:any) => {
-                    console.log('got connected!');
-                    req.on('error', (err: any) => {
-                        console.log('error: ');
-                    });                  
-                });
-                //req.writeHead(200, { 'Content-Type': 'application/json' });
-                req.write(JSON.stringify({test: 'test'}));
-                req.end()
-            })
-        }, 2000)
+        connects.forEach(options => {
+            const req = http.request(options,(res) => {
+                res.setEncoding('utf8')
+                res.on('finish',() => {
+                    console.log('--------------')
+                })
+                res.on('data',(chunk: Buffer) => {
+                    console.log(chunk.toString())
+                })
+            });
+            req.write("dedede")
+            req.end()
+            //this.peerConnection.push(req)
+        })
+        await Promise.all(this.peerConnection);
+        return this;
+    }
+    async updateBlockChain(blockChain: any){
+        this.peerConnection.forEach((req: any )=> {
+            console.log(blockChain)
+            req.write(JSON.stringify(blockChain));
+            req.on('error', (err: any) => {
+                console.log('error : ', err);
+            });  
+        })
     }
 }

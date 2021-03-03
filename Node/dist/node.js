@@ -40,12 +40,12 @@ var Serveur_1 = require("./core/Serveur");
 var IPv4_1 = require("./core/IPv4");
 var Client_1 = require("./core/Client");
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var ipv4, peers, test, client;
+    var ipv4, peers, client, serveur;
     return __generator(this, function (_a) {
         ipv4 = new IPv4_1.IPv4();
         peers = ipv4.send();
-        test = new Serveur_1.Serveur(5000).launch();
         client = new Client_1.Client(peers).connectPeer();
+        serveur = new Serveur_1.Serveur(5000).launch(client);
         return [2 /*return*/];
     });
 }); })();

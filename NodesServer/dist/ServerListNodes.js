@@ -56,7 +56,6 @@ app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, func
             case 0: return [4 /*yield*/, nodesCollection.update(req.body, req.body, { upsert: true })];
             case 1:
                 result = _a.sent();
-                console.log('---------', req.body);
                 data = nodesCollection.find({});
                 //if(data.include())
                 data.toArray(function (err, nodesCollection) {

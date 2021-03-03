@@ -6,10 +6,23 @@ services:
       - "9001:9001"
     volumes:
       - "./NodesServer:/usr/src/app/"
-    depends_on:
+    links:
       - mongodb
     command: npm start
     #command: tail -f /dev/null
+  node-react:
+    build: ./docker/node
+    volumes:
+      - "./Node:/usr/src/app/"
+    links:
+      - "node"
+    depends_on:
+      - nodeserver
+    deploy:
+      replicas: 1
+    ports:
+      - "5000:5000"
+    command: npm start
   node:
     build: ./docker/node
     volumes:
@@ -17,9 +30,19 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 2
+      replicas: 1
     command: npm start
-
+  front-react:
+    build: ./docker/react
+    restart: always
+    depends_on:
+      - nodeserver
+      - node
+    volumes:
+      - "./front-blockchain:/usr/src/app/"
+    command: yarn start
+    ports:
+      - "3000:3000"
   mongodb:
     image: "mongo"
     ports:

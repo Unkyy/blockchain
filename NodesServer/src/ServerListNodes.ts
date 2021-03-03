@@ -17,7 +17,7 @@ MongoClient.connect(url, function(err: any, client: any) {
 
 app.post('/',async (req: any, res: any) => {
     const result = await nodesCollection.update(req.body,req.body, { upsert: true });
-    console.log('---------',req.body)
+    //console.log('---------',req.body)
     const data = nodesCollection.find({})
     //if(data.include())
     data.toArray(function(err:any, nodesCollection:any) {

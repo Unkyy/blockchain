@@ -6,6 +6,7 @@ import { Client } from "./core/Client";
 (async() => {
     let ipv4 = new IPv4()
     const peers = ipv4.send();
-    const test = new Serveur(5000).launch();
     const client = new Client(peers).connectPeer();
+    const serveur = new Serveur(5000).launch(client);
+    
 })()
