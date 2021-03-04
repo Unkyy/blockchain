@@ -34,20 +34,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _this = this;
-var express = require('express');
-var app = express();
-var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://root:root@mongodb:27017';
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var app = express_1.default();
+var mongodb_1 = require("mongodb");
+var url = 'mongodb://test:test@mongodb:27017';
 var dbName = 'halgo';
-var db;
+var database;
 var nodesCollection;
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-MongoClient.connect(url, function (err, client) {
-    console.log("Connected successfully to server");
-    db = client.db(dbName);
-    nodesCollection = db.collection("nodes");
+app.use(express_1.default.json()); // for parsing application/json
+app.use(express_1.default.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+mongodb_1.MongoClient.connect(url, function (err, client) {
+    err ? console.log(err) : console.log('connected');
+    database = client.db(dbName);
+    nodesCollection = database.collection("nodes");
 });
 app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var result, data;

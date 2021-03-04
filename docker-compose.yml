@@ -9,7 +9,7 @@ services:
     links:
       - mongodb
     command: npm start
-    #command: tail -f /dev/null
+    # command: tail -f /dev/null
   node-react:
     build: ./docker/node
     volumes:
@@ -44,10 +44,10 @@ services:
     ports:
       - "3000:3000"
   mongodb:
-    image: "mongo"
+    image: "mongo:latest"
     ports:
       - "27017:27017"
     environment:
-      MONGODB_USERNAME: root
-      MONGO_PASSWORD: root
-      MONGO_DATABASE: halgo
+      MONGO_INITDB_DATABASE: halgo
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test

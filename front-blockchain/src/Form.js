@@ -14,14 +14,32 @@ const Form = () => {
 
     const handleClick = (e) => {
         e.preventDefault()
-        myInit.body = {"amont": coins.current.value};
+        myInit.body = JSON.stringify({"amont": coins.current.value});
         console.log(myInit)
-        //fetch('http://localhost:5000/', myInit).then(rep => {
-        //    console.log(rep)
-        //})
-        axios.get('http://localhost:5000/').then(elem => {
-            console.log(elem)
+        fetch('http://localhost:5000/', myInit).then(rep => {
+            console.log(rep)
         })
+        // axios.get('http://localhost:5000/').then(elem => {
+        //      console.log(elem)
+        // })
+        // var data = JSON.stringify({
+        //     "test": "dedededededededede"
+        //   });
+          
+        //   var xhr = new XMLHttpRequest();
+        //   xhr.withCredentials = false;
+          
+        //   xhr.addEventListener("readystatechange", function () {
+        //     if (this.readyState === 4) {
+        //       console.log(this.responseText);
+        //     }
+        //   });
+          
+        //   xhr.open("POST", "http://localhost:5000/");
+        //   xhr.setRequestHeader("content-type", "application/json");
+        //   xhr.setRequestHeader("cache-control", "no-cache");   
+        //   xhr.setRequestHeader('Access-Control-Allow-Origin', '*');          
+        //   xhr.send(data);
     }
     return(
         <Fragment>   
