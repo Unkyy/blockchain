@@ -34,18 +34,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var Serveur_1 = require("./core/Serveur");
-var IPv4_1 = require("./core/IPv4");
-var Client_1 = require("./core/Client");
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var ipv4, peers, client, serveur;
-    return __generator(this, function (_a) {
-        ipv4 = new IPv4_1.IPv4();
-        peers = ipv4.send();
-        client = new Client_1.Client(peers);
-        serveur = new Serveur_1.Serveur(5000, client).launch();
-        return [2 /*return*/];
-    });
-}); })();
+var crypto_1 = require("crypto");
+var Block_1 = require("./Block");
+var BlockChain_1 = require("./BlockChain");
+var timer = function (ms) { return new Promise(function (res) { return setTimeout(res, ms); }); };
+var Minning = /** @class */ (function () {
+    function Minning(howManyZero) {
+        if (howManyZero === void 0) { howManyZero = 5; }
+        this.block = new Block_1.Block(new Date, "0");
+        this.howManyZero = howManyZero;
+        var zero = [];
+        for (var i = 0; i < this.howManyZero; i++) {
+            zero.push("0");
+        }
+        this.zero = zero.join('');
+    }
+    Minning.prototype.findHash = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var hash;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.block.preHash = BlockChain_1.blockChain.getLastBlock().hash ? BlockChain_1.blockChain.getLastBlock().hash : "0";
+                        hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
+                        _a.label = 1;
+                    case 1:
+                        if (!!this.validHash(hash)) return [3 /*break*/, 3];
+                        hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
+                        this.block.incrementNonce();
+                        return [4 /*yield*/, timer(300)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 1];
+                    case 3: return [2 /*return*/, this.block];
+                }
+            });
+        });
+    };
+    Minning.prototype.validHash = function (hash) {
+        return hash.substring(0, this.howManyZero)
+            .includes(this.zero);
+    };
+    return Minning;
+}());
+exports.Minning = Minning;

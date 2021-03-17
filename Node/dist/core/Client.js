@@ -44,14 +44,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var IPv4_1 = require("./IPv4");
 var http = __importStar(require("http"));
+var BlockChain_1 = require("../models/BlockChain");
 var Client = /** @class */ (function () {
     function Client(peerList) {
         this.peerConnection = [];
         this.peerList = peerList;
     }
-    Client.prototype.connectPeer = function () {
+    Client.prototype.sendAllPeer = function (data, path) {
         return __awaiter(this, void 0, void 0, function () {
-            var list, connects, ip;
+            var list, connects, ip, rep;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.peerList];
@@ -62,6 +64,7 @@ var Client = /** @class */ (function () {
                                 method: "POST",
                                 host: elem.IP,
                                 port: 5000,
+                                path: path,
                                 headers: {
                                     'Content-Type': 'application/json',
                                     "cache-control": "no-cache",
@@ -71,39 +74,55 @@ var Client = /** @class */ (function () {
                         });
                         ip = new IPv4_1.IPv4().getIp();
                         connects = connects.filter(function (elem) { return elem.host != ip; });
-                        connects.forEach(function (options) {
-                            var req = http.request(options, function (res) {
-                                res.setEncoding('utf8');
-                                res.on('finish', function () {
-                                    console.log('--------------');
-                                });
-                                res.on('data', function (chunk) {
-                                    console.log(chunk.toString());
-                                });
+                        rep = connects.map(function (options) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                return [2 /*return*/, new Promise(function (resolve) {
+                                        var req = http.request(options, function (res) {
+                                            res.setEncoding('utf8');
+                                            //res.on('error', () => {
+                                            //    console.log('error')
+                                            //})
+                                            res.on('finish', function () {
+                                                console.log('--------------');
+                                            });
+                                            res.on('data', function (chunk) {
+                                                // console.log('----')
+                                                var data = JSON.parse(chunk.toString());
+                                                BlockChain_1.blockChain.mergreBlock(data);
+                                                //console.log('client :  ',data)
+                                                //console.log('----')
+                                            });
+                                        });
+                                        req.on('error', function (err) {
+                                            var serveur = http.request({
+                                                method: "POST",
+                                                host: "nodeserver",
+                                                path: '/peerDisconected',
+                                                port: 9001,
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    "cache-control": "no-cache",
+                                                    "mode": 'cors',
+                                                }
+                                            }, function (res) {
+                                            });
+                                            serveur.on('error', function (error) {
+                                                console.error(error);
+                                            });
+                                            serveur.write(JSON.stringify({ ip: options.host }));
+                                            serveur.end();
+                                        });
+                                        req.write(JSON.stringify(data));
+                                        req.end();
+                                        resolve();
+                                        _this.peerConnection.push(req);
+                                    })];
                             });
-                            req.write("dedede");
-                            req.end();
-                            //this.peerConnection.push(req)
-                        });
-                        return [4 /*yield*/, Promise.all(this.peerConnection)];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/, this];
+                        }); });
+                        return [4 /*yield*/, Promise.all(rep)];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
-            });
-        });
-    };
-    Client.prototype.updateBlockChain = function (blockChain) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.peerConnection.forEach(function (req) {
-                    console.log(blockChain);
-                    req.write(JSON.stringify(blockChain));
-                    req.on('error', function (err) {
-                        console.log('error : ', err);
-                    });
-                });
-                return [2 /*return*/];
             });
         });
     };

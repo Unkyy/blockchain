@@ -2,31 +2,48 @@ import { Client } from "./Client";
 
 import * as http from 'http';
 import { IncomingMessage, ServerResponse } from "http";
+import { blockChain} from "../models/BlockChain";
+import { Minning } from "../models/Minning";
+import { Block } from "../models/Block";
+import {EventEmitter} from "events"
+import pendingTransation from "../models/pendingTransation";
+import { blockChainController } from "../controller/blockchain";
+import { transactionController } from "../controller/transaction";
 
 export class Serveur{
-
+    minning = false;
     port: number
-    constructor(port:number, ){
+    client: Client
+    //blockchain: BlockChain = new BlockChain()
+    constructor(port:number, client: Client){
         this.port = port;
+        console.log('constructor',client)
+        this.client = client
     }
-    launch(client: Promise<Client>): Promise<void>{
-    //launch(): Promise<void>{
-        return new Promise(res => {
-            http.createServer((req: IncomingMessage, res: ServerResponse) => {
-                //res.writeHead(200, { 'Access-Control-Allow-Credentials': 'true','Access-Control-Allow-Origin': 'localhost:5000','Content-Type': 'application/json' });
-                //res.writeHead('Access-Control-Request-Method', '*');
-                res.setHeader('Access-Control-Allow-Origin','*')
-                if(req.method === "OPTIONS"){
-                    res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type')
-                }
-                req.on('data',(chunk: Buffer) => {
-                    console.log('server',chunk.toString())
-                })
-                res.write(JSON.stringify({"test": 10}))
-                res.end()
+    App(){
+        const emitter = new EventEmitter()
+        http.createServer((req: IncomingMessage, res: ServerResponse) => {
+            res.setHeader('Access-Control-Allow-Origin','*')
+            req.on('error', (err) => {
+                console.log('server error:', err)
             })
-            .listen(this.port,()=> res(console.log("running on  port : " + this.port)))
-
+            if(req.method === "OPTIONS"){
+                res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type')
+            }
+            if(req.url === "/blockchain"){
+                emitter.emit('blockchain',req, res,this.client)
+            }
+            if(req.url === "/transaction"){
+                emitter.emit('transaction',req, res,this.client)
+            }
+            console.log(req.url)
         })
+        .listen(this.port,()=> console.log("running on  port : " + this.port))
+        return emitter
+    }
+    launch()  {
+        const app = this.App()
+        app.on('blockchain',blockChainController)
+        app.on('transaction',transactionController)
     }
 }

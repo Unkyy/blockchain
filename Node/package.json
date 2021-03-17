@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently --kill-others \"tsc -w\" \"nodemon dist/node.js\""
+    "start": "concurrently --kill-others \"tsc -w\" \"nodemon  --stack-size=32000 dist/node.js\""
   },
   "author": "Hugo Alberola",
   "license": "ISC",

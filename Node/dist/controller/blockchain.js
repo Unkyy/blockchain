@@ -36,16 +36,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var Serveur_1 = require("./core/Serveur");
-var IPv4_1 = require("./core/IPv4");
-var Client_1 = require("./core/Client");
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var ipv4, peers, client, serveur;
+var BlockChain_1 = require("../models/BlockChain");
+var Minning_1 = require("../models/Minning");
+exports.blockChainController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
+    var minning;
     return __generator(this, function (_a) {
-        ipv4 = new IPv4_1.IPv4();
-        peers = ipv4.send();
-        client = new Client_1.Client(peers);
-        serveur = new Serveur_1.Serveur(5000, client).launch();
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                req.on('data', function (chunk) {
+                    var data = JSON.parse(chunk.toString());
+                    //console.log(req.rawHeaders[1].split(':')[0])
+                    //console.log(req.rawHeaders)
+                    //this.client.updateBlockChain(data)
+                    if (data.blocks) {
+                        console.log(' lourdaas');
+                        //this.handleBlochain(data)
+                        client.sendAllPeer(data, "/blockchain");
+                    }
+                    else {
+                        //pendingTransation.setTransation(data)
+                    }
+                });
+                res.write(JSON.stringify(JSON.stringify(BlockChain_1.blockChain)));
+                res.end();
+                return [4 /*yield*/, new Minning_1.Minning().findHash()];
+            case 1:
+                minning = _a.sent();
+                return [2 /*return*/];
+        }
     });
-}); })();
+}); };

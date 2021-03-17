@@ -37,20 +37,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var app = express_1.default();
 var mongodb_1 = require("mongodb");
+var http = __importStar(require("http"));
 var url = 'mongodb://test:test@mongodb:27017';
 var dbName = 'halgo';
 var database;
 var nodesCollection;
+var options = {
+    method: "POST",
+    host: null,
+    port: 5000,
+    headers: {
+        'Content-Type': 'application/json',
+        "cache-control": "no-cache",
+        "mode": 'cors',
+    }
+};
 app.use(express_1.default.json()); // for parsing application/json
 app.use(express_1.default.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 mongodb_1.MongoClient.connect(url, function (err, client) {
     err ? console.log(err) : console.log('connected');
     database = client.db(dbName);
+    //nodesCollection.drop()
     nodesCollection = database.collection("nodes");
 });
 app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
@@ -69,6 +88,22 @@ app.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, func
                 });
                 return [2 /*return*/];
         }
+    });
+}); });
+app.post('/peerDisconected', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var body, req_1;
+    return __generator(this, function (_a) {
+        body = req.body;
+        if (body.ip) {
+            options.host = body.ip;
+            req_1 = http.request(options, function (res) {
+                res.setEncoding('utf8');
+            });
+            req_1.on('error', function (err) {
+                nodesCollection.remove({ IP: { $eq: body.ip } }, true);
+            });
+        }
+        return [2 /*return*/];
     });
 }); });
 app.listen(9001);

@@ -8,29 +8,43 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var http = __importStar(require("http"));
+var events_1 = require("events");
+var blockchain_1 = require("../controller/blockchain");
+var transaction_1 = require("../controller/transaction");
 var Serveur = /** @class */ (function () {
-    function Serveur(port) {
+    //blockchain: BlockChain = new BlockChain()
+    function Serveur(port, client) {
+        this.minning = false;
         this.port = port;
+        console.log('constructor', client);
+        this.client = client;
     }
-    Serveur.prototype.launch = function (client) {
+    Serveur.prototype.App = function () {
         var _this = this;
-        //launch(): Promise<void>{
-        return new Promise(function (res) {
-            http.createServer(function (req, res) {
-                //res.writeHead(200, { 'Access-Control-Allow-Credentials': 'true','Access-Control-Allow-Origin': 'localhost:5000','Content-Type': 'application/json' });
-                //res.writeHead('Access-Control-Request-Method', '*');
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                if (req.method === "OPTIONS") {
-                    res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type');
-                }
-                req.on('data', function (chunk) {
-                    console.log('server', chunk.toString());
-                });
-                res.write(JSON.stringify({ "test": 10 }));
-                res.end();
-            })
-                .listen(_this.port, function () { return res(console.log("running on  port : " + _this.port)); });
-        });
+        var emitter = new events_1.EventEmitter();
+        http.createServer(function (req, res) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            req.on('error', function (err) {
+                console.log('server error:', err);
+            });
+            if (req.method === "OPTIONS") {
+                res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type');
+            }
+            if (req.url === "/blockchain") {
+                emitter.emit('blockchain', req, res, _this.client);
+            }
+            if (req.url === "/transaction") {
+                emitter.emit('transaction', req, res, _this.client);
+            }
+            console.log(req.url);
+        })
+            .listen(this.port, function () { return console.log("running on  port : " + _this.port); });
+        return emitter;
+    };
+    Serveur.prototype.launch = function () {
+        var app = this.App();
+        app.on('blockchain', blockchain_1.blockChainController);
+        app.on('transaction', transaction_1.transactionController);
     };
     return Serveur;
 }());

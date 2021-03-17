@@ -34,18 +34,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var Serveur_1 = require("./core/Serveur");
-var IPv4_1 = require("./core/IPv4");
-var Client_1 = require("./core/Client");
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var ipv4, peers, client, serveur;
+var pendingTransation_1 = __importDefault(require("../models/pendingTransation"));
+exports.transactionController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        ipv4 = new IPv4_1.IPv4();
-        peers = ipv4.send();
-        client = new Client_1.Client(peers);
-        serveur = new Serveur_1.Serveur(5000, client).launch();
+        req.on('data', function (chunk) {
+            var data = JSON.parse(chunk.toString());
+            //console.log(req.rawHeaders[1].split(':')[0])
+            //console.log(req.rawHeaders)
+            //
+            if (!pendingTransation_1.default.alreadySend(data)) {
+                pendingTransation_1.default.setTransation(data);
+                client.sendAllPeer(data, "/transaction");
+                //console.log(pendingTransation.getTransaction())
+            }
+        });
+        res.write(JSON.stringify(pendingTransation_1.default.getTransaction()));
+        res.end();
         return [2 /*return*/];
     });
-}); })();
+}); };
