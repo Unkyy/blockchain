@@ -37,32 +37,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var BlockChain_1 = require("../models/BlockChain");
-var Minning_1 = require("../models/Minning");
 exports.blockChainController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
-    var minning;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                req.on('data', function (chunk) {
-                    var data = JSON.parse(chunk.toString());
-                    //console.log(req.rawHeaders[1].split(':')[0])
-                    //console.log(req.rawHeaders)
-                    //this.client.updateBlockChain(data)
-                    if (data.blocks) {
-                        console.log(' lourdaas');
-                        //this.handleBlochain(data)
-                        client.sendAllPeer(data, "/blockchain");
-                    }
-                    else {
-                        //pendingTransation.setTransation(data)
-                    }
-                });
-                res.write(JSON.stringify(JSON.stringify(BlockChain_1.blockChain)));
-                res.end();
-                return [4 /*yield*/, new Minning_1.Minning().findHash()];
-            case 1:
-                minning = _a.sent();
-                return [2 /*return*/];
-        }
+        req.on('data', function (chunk) {
+            var data = JSON.parse(chunk.toString());
+            //console.log(req.rawHeaders[1].split(':')[0])
+            //console.log(req.rawHeaders)
+            //this.client.updateBlockChain(data)
+            if (BlockChain_1.blockChain.mergreBlock(data)) {
+                client.sendAllPeer(data, "/blockchain");
+            }
+            //console.log('serveur',data)
+            //this.handleBlochain(data)
+            //client.sendAllPeer(data,"/blockchain")
+        });
+        //res.write(JSON.stringify(JSON.stringify(blockChain)))
+        res.end();
+        return [2 /*return*/];
     });
 }); };

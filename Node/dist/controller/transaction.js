@@ -53,8 +53,9 @@ exports.transactionController = function (req, res, client) { return __awaiter(_
                 //console.log(pendingTransation.getTransaction())
             }
         });
+        console.log('yesss');
         res.write(JSON.stringify(pendingTransation_1.default.getTransaction()));
-        res.end();
+        res.end(200);
         return [2 /*return*/];
     });
 }); };

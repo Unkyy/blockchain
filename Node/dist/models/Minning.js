@@ -39,16 +39,17 @@ var crypto_1 = require("crypto");
 var Block_1 = require("./Block");
 var BlockChain_1 = require("./BlockChain");
 var timer = function (ms) { return new Promise(function (res) { return setTimeout(res, ms); }); };
+var howManyZero = function (howManyZero) {
+    if (howManyZero === void 0) { howManyZero = 3; }
+    var zero = [];
+    for (var i = 0; i < howManyZero; i++) {
+        zero.push("0");
+    }
+    return zero.join('');
+};
 var Minning = /** @class */ (function () {
-    function Minning(howManyZero) {
-        if (howManyZero === void 0) { howManyZero = 5; }
+    function Minning() {
         this.block = new Block_1.Block(new Date, "0");
-        this.howManyZero = howManyZero;
-        var zero = [];
-        for (var i = 0; i < this.howManyZero; i++) {
-            zero.push("0");
-        }
-        this.zero = zero.join('');
     }
     Minning.prototype.findHash = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -60,22 +61,28 @@ var Minning = /** @class */ (function () {
                         hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
                         _a.label = 1;
                     case 1:
-                        if (!!this.validHash(hash)) return [3 /*break*/, 3];
-                        hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
+                        if (!!Minning.validHash(hash)) return [3 /*break*/, 3];
                         this.block.incrementNonce();
-                        return [4 /*yield*/, timer(300)];
+                        hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
+                        return [4 /*yield*/, timer(10)
+                            //console.log(this.block)
+                            //console.log(hash)
+                        ];
                     case 2:
                         _a.sent();
                         return [3 /*break*/, 1];
-                    case 3: return [2 /*return*/, this.block];
+                    case 3:
+                        this.block.hash = hash;
+                        return [2 /*return*/, this.block];
                 }
             });
         });
     };
-    Minning.prototype.validHash = function (hash) {
-        return hash.substring(0, this.howManyZero)
-            .includes(this.zero);
+    Minning.validHash = function (hash) {
+        return hash.substring(0, Minning.zero.length)
+            .includes(Minning.zero);
     };
+    Minning.zero = howManyZero();
     return Minning;
 }());
 exports.Minning = Minning;

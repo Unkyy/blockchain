@@ -17,6 +17,7 @@ export const transactionController = async (req: IncomingMessage, res: ServerRes
             //console.log(pendingTransation.getTransaction())
         }
     })
+    console.log('yesss')
     res.write(JSON.stringify(pendingTransation.getTransaction()))
-    res.end()
+    res.end(200)
 }

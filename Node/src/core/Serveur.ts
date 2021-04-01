@@ -17,8 +17,9 @@ export class Serveur{
     //blockchain: BlockChain = new BlockChain()
     constructor(port:number, client: Client){
         this.port = port;
-        console.log('constructor',client)
+        //console.log('constructor',client)
         this.client = client
+        this.handleminning()
     }
     App(){
         const emitter = new EventEmitter()
@@ -27,16 +28,24 @@ export class Serveur{
             req.on('error', (err) => {
                 console.log('server error:', err)
             })
-            if(req.method === "OPTIONS"){
+            const url = req.url ? req.url.split('/') : ""
+            console.log('->>>',url)
+            if(url ===""){
+                res.statusCode = 404;
+                res.end("404 Not Found");
+            }
+            else if(req.method === "OPTIONS"){
                 res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type')
             }
-            if(req.url === "/blockchain"){
+            else if(url[1] === "blockchain"){
                 emitter.emit('blockchain',req, res,this.client)
             }
-            if(req.url === "/transaction"){
+            else if(url[1] === "transaction"){
                 emitter.emit('transaction',req, res,this.client)
+            }else {
+                res.statusCode = 404;
+                res.end("404 Not Found");
             }
-            console.log(req.url)
         })
         .listen(this.port,()=> console.log("running on  port : " + this.port))
         return emitter
@@ -45,5 +54,12 @@ export class Serveur{
         const app = this.App()
         app.on('blockchain',blockChainController)
         app.on('transaction',transactionController)
+    }
+    async handleminning(){
+        while(true){
+            const minning = await new Minning().findHash()
+            blockChain.addBlock(minning)
+            this.client.sendAllPeer(minning,'/blockchain')
+        }
     }
 }

@@ -10,16 +10,15 @@ export const blockChainController = async (req: IncomingMessage, res: ServerResp
         //console.log(req.rawHeaders[1].split(':')[0])
         //console.log(req.rawHeaders)
         //this.client.updateBlockChain(data)
-        if(data.blocks){
-            console.log(' lourdaas')
-            //this.handleBlochain(data)
+        if(blockChain.mergreBlock(data)){
             client.sendAllPeer(data,"/blockchain")
-        }else{
-            //pendingTransation.setTransation(data)
         }
-    })
-    res.write(JSON.stringify(JSON.stringify(blockChain)))
-    res.end()
-    const minning = await new Minning().findHash()
+        //console.log('serveur',data)
+        //this.handleBlochain(data)
+        //client.sendAllPeer(data,"/blockchain")
 
+    })
+
+    //res.write(JSON.stringify(JSON.stringify(blockChain)))
+    res.end()
 }
