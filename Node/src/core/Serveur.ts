@@ -3,13 +3,13 @@ import { Client } from "./Client";
 import * as http from 'http';
 import { IncomingMessage, ServerResponse } from "http";
 import { blockChain} from "../models/BlockChain";
-import { Minning } from "../models/Minning";
+import { Mining } from "../models/Mining";
 import {EventEmitter} from "events"
 import { blockChainController } from "../controller/blockchain";
 import { transactionController } from "../controller/transaction";
 
 export class Serveur{
-    minning = false;
+    mining = false;
     port: number
     client: Client
     //blockchain: BlockChain = new BlockChain()
@@ -17,7 +17,7 @@ export class Serveur{
         this.port = port;
         //console.log('constructor',client)
         this.client = client
-        this.handleminning()
+        this.handlemining()
     }
     App(){
         const emitter = new EventEmitter()
@@ -52,11 +52,11 @@ export class Serveur{
         app.on('blockchain',blockChainController)
         app.on('transaction',transactionController)
     }
-    async handleminning(){
+    async handlemining(){
         while(true){
-            const minning = await new Minning().findHash()
-            blockChain.addBlock(minning)
-            this.client.sendAllPeer(minning,'/blockchain')
+            const mining = await new Mining().findHash()
+            blockChain.addBlock(mining)
+            this.client.sendAllPeer(mining,'/blockchain')
         }
     }
 }

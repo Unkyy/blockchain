@@ -1,6 +1,6 @@
 import { Block } from "./Block"
 import { createHash } from "crypto";
-import { Minning } from "./Minning";
+import { Mining } from "./Mining";
 import wallet from "./Wallet";
 
 export class BlockChain {
@@ -29,7 +29,7 @@ export class BlockChain {
             if(posthash == "0" && i >0) return false
             if(element.hash != hash) return false;
             if(posthash !== element.preHash) return false
-            if(!Minning.validHash(hash)) return false
+            if(!Mining.validHash(hash)) return false
         }
         return true;
     }
@@ -42,7 +42,7 @@ export class BlockChain {
         if(block.preHash == "0" && this.blocks.length >0) return false
         if(element.hash != hash) return false;
         if(posthash !== element.preHash) return false
-        if(!Minning.validHash(hash)) return false
+        if(!Mining.validHash(hash)) return false
         //valider la reward
         return true
     }

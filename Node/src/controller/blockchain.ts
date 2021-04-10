@@ -1,7 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http"
 import { Client } from "../core/Client"
 import { blockChain } from "../models/BlockChain"
-import { Minning } from "../models/Minning"
 
 
 export const blockChainController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {

@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blockChain = exports.BlockChain = void 0;
 var Block_1 = require("./Block");
 var crypto_1 = require("crypto");
-var Minning_1 = require("./Minning");
+var Mining_1 = require("./Mining");
 var Wallet_1 = __importDefault(require("./Wallet"));
 var BlockChain = /** @class */ (function () {
     function BlockChain() {
@@ -48,7 +48,7 @@ var BlockChain = /** @class */ (function () {
                 return false;
             if (posthash !== element.preHash)
                 return false;
-            if (!Minning_1.Minning.validHash(hash))
+            if (!Mining_1.Mining.validHash(hash))
                 return false;
         }
         return true;
@@ -65,7 +65,7 @@ var BlockChain = /** @class */ (function () {
             return false;
         if (posthash !== element.preHash)
             return false;
-        if (!Minning_1.Minning.validHash(hash))
+        if (!Mining_1.Mining.validHash(hash))
             return false;
         //valider la reward
         return true;

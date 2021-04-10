@@ -14,7 +14,7 @@ const howManyZero = (howManyZero = 3) => {
     return zero.join('')
 }
 
-export class Minning {
+export class Mining {
     block: Block;
     static zero: string = howManyZero();
     constructor(){
@@ -30,7 +30,7 @@ export class Minning {
         this.block.preHash  =  blockChain.getLastBlock().hash ? blockChain.getLastBlock().hash : "0"
         let hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
         
-        while(!Minning.validHash(hash)){
+        while(!Mining.validHash(hash)){
             this.block.incrementNonce()
             hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
             await timer(10)
@@ -42,7 +42,7 @@ export class Minning {
         return this.block
     }
     static validHash(hash: string){
-        return hash.substring(0,Minning.zero.length)
-        .includes(Minning.zero)
+        return hash.substring(0,Mining.zero.length)
+        .includes(Mining.zero)
     }
 }

@@ -58,18 +58,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Serveur = void 0;
 var http = __importStar(require("http"));
 var BlockChain_1 = require("../models/BlockChain");
-var Minning_1 = require("../models/Minning");
+var Mining_1 = require("../models/Mining");
 var events_1 = require("events");
 var blockchain_1 = require("../controller/blockchain");
 var transaction_1 = require("../controller/transaction");
 var Serveur = /** @class */ (function () {
     //blockchain: BlockChain = new BlockChain()
     function Serveur(port, client) {
-        this.minning = false;
+        this.mining = false;
         this.port = port;
         //console.log('constructor',client)
         this.client = client;
-        this.handleminning();
+        this.handlemining();
     }
     Serveur.prototype.App = function () {
         var _this = this;
@@ -106,18 +106,18 @@ var Serveur = /** @class */ (function () {
         app.on('blockchain', blockchain_1.blockChainController);
         app.on('transaction', transaction_1.transactionController);
     };
-    Serveur.prototype.handleminning = function () {
+    Serveur.prototype.handlemining = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var minning;
+            var mining;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!true) return [3 /*break*/, 2];
-                        return [4 /*yield*/, new Minning_1.Minning().findHash()];
+                        return [4 /*yield*/, new Mining_1.Mining().findHash()];
                     case 1:
-                        minning = _a.sent();
-                        BlockChain_1.blockChain.addBlock(minning);
-                        this.client.sendAllPeer(minning, '/blockchain');
+                        mining = _a.sent();
+                        BlockChain_1.blockChain.addBlock(mining);
+                        this.client.sendAllPeer(mining, '/blockchain');
                         return [3 /*break*/, 0];
                     case 2: return [2 /*return*/];
                 }
