@@ -1,6 +1,7 @@
 import { Block } from "./Block"
 import { createHash } from "crypto";
 import { Minning } from "./Minning";
+import wallet from "./Wallet";
 
 export class BlockChain {
     blocks: Array<Block> = []
@@ -10,7 +11,7 @@ export class BlockChain {
         //if(!blocks) return false;
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
-        console.log(this.addBlock(block))
+        this.addBlock(block)
         return false
        // return true
     }
@@ -33,33 +34,40 @@ export class BlockChain {
         return true;
     }
     validblock(block: Block){
-
-    }
-    addBlock(block: Block): boolean{
         const element = block;
         const verifElement = {...block}
         verifElement.hash = ''
         const posthash = this.blocks[this.blocks.length-1] ? this.blocks[this.blocks.length-1].hash : "0";
-        console.log(posthash)
         const hash = createHash('sha256').update(JSON.stringify(verifElement)).digest("hex");
         if(block.preHash == "0" && this.blocks.length >0) return false
         if(element.hash != hash) return false;
         if(posthash !== element.preHash) return false
         if(!Minning.validHash(hash)) return false
+        //valider la reward
+        return true
+    }
+    addBlock(block: Block): boolean{
+        if(this.validblock(block)) return false
         this.blocks.push(block)
-        console.log(this.blocks)
+        console.log('block ',createHash('sha256').update(JSON.stringify(this.blocks)).digest("hex"));
+        console.log(blockChain.length())
+        wallet.getMoney()
         return true 
     }
     getLastBlock(){
         const block = this.blocks[this.blocks.length -1]
         return  block ? block : new Block(new Date, "0")
     }
+    getFirstBlock(){
+        return this.blocks[0]
+    }
     getAllBlock():Array<Block>  {
         return this.blocks
     }
-    length(){
+    length(): number{
         return this.blocks.length
     }
 }
 
 export const blockChain = new BlockChain()
+

@@ -4,8 +4,8 @@ import crypto from "crypto"
 
 const Form = () => {
     const coins = useRef()
-    const user = useRef()
-    const password = useRef()
+    const toAddress = useRef()
+    const passphrase = useRef()
     //const {transaction, setTransaction} = useState()
     const myInit = {
         method: 'POST',
@@ -20,8 +20,8 @@ const Form = () => {
         e.preventDefault()
         let transaction = {
             "amount": coins.current.value,
-            "user": user.current.value,
-            "password": password.current.value,
+            "toAddress": toAddress.current.value,
+            "passphrase": passphrase.current.value,
             "datetime": Date.now(),
             "test": 'lllooooolll'
         }
@@ -45,12 +45,12 @@ const Form = () => {
         <Fragment>
             <label for="number">amount : </label>
             <input id="number" type="number" ref={coins}></input>
-            <label  for="fname">user :</label>
-            <input id="user"  ref={user}></input>
-            <label for="password">password : </label>
-            <input  id="password"  ref={password}></input>
+            <label  for="fname">toAddress :</label>
+            <input id="toAddress"  ref={toAddress}></input>
+            <label for="passphrase">passphrase : </label>
+            <input  id="passphrase"  ref={passphrase}></input>
             <button onClick={handleClick}>
-                acheter des halgo
+                payer
             </button>
         </Fragment>
     )

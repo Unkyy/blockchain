@@ -2,6 +2,7 @@ import { IPv4 } from "./IPv4";
 import { PeerList } from "./PeersList";
 import * as http from 'http';
 import { BlockChain, blockChain } from "../models/BlockChain";
+import { Block } from "../models/Block";
 
 
 export class Client {
@@ -40,7 +41,7 @@ export class Client {
                     })
                     res.on('data',(chunk: Buffer) => {
                        // console.log('----')
-                        const data: BlockChain = JSON.parse(chunk.toString())
+                        const data: Block = JSON.parse(chunk.toString())
                         blockChain.mergreBlock(data)
                         //console.log('client :  ',data)
                         //console.log('----')

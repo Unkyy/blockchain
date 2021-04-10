@@ -1,12 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
-import Form from './Form';
+import  {BrowserRouter as Router,Switch,Route,Link } from'react-router-dom'
+import Blockchain from './components/Blockchain.jsx';
+import Transaction from './components/Transactions.jsx';
+
 
 function App() {
   return (
-    <div className="App">
-      <Form></Form>
-    </div>
+    <Router>
+        <div>
+          <ul>
+            <li>
+              <Link to="/blockchain">blockchain</Link>
+            </li>
+            <li>
+              <Link to="/transaction">transaction</Link>
+            </li>
+          </ul>
+        <Switch>
+          <Route path="/blockchain" component={Blockchain} ></Route>
+          <Route path="/transaction" component={Transaction} ></Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

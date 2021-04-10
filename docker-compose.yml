@@ -30,7 +30,7 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 1
+      replicas: 2
     command: npm start
   front-react:
     build: ./docker/react

@@ -2,25 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var PendingTransation = /** @class */ (function () {
     function PendingTransation() {
-        this.transaction = [];
+        this.transactions = [];
     }
-    PendingTransation.prototype.verifTransaction = function (transaction) {
+    PendingTransation.prototype.validTransaction = function (transaction) {
         return true;
     };
-    PendingTransation.prototype.alreadySend = function (transaction) {
-        if (this.transaction.length === 0) {
+    PendingTransation.prototype.addTransaction = function (transaction) {
+        if (this.transactions.some(function (elem) { return elem.hash === transaction.hash; })) {
             return false;
         }
-        return this.transaction.map(function (elem) { return JSON.stringify(elem); }).includes(JSON.stringify(transaction));
+        if (this.validTransaction(transaction)) {
+            this.pushTransation(transaction);
+            return true;
+        }
+        return false;
     };
-    PendingTransation.prototype.getTransaction = function () {
-        return this.transaction;
+    PendingTransation.prototype.getTransactionPool = function () {
+        return this.transactions;
     };
-    PendingTransation.prototype.setTransation = function (transaction) {
+    PendingTransation.prototype.pushTransation = function (transaction) {
         var require = ["amount", "user", "password", "hash", "datetime"];
         //console.log('------',transaction.getKey)
-        this.transaction.push(transaction);
-        //console.log(this.transaction)
+        this.transactions.push(transaction);
     };
     return PendingTransation;
 }());

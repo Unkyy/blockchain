@@ -4,9 +4,7 @@ import * as http from 'http';
 import { IncomingMessage, ServerResponse } from "http";
 import { blockChain} from "../models/BlockChain";
 import { Minning } from "../models/Minning";
-import { Block } from "../models/Block";
 import {EventEmitter} from "events"
-import pendingTransation from "../models/pendingTransation";
 import { blockChainController } from "../controller/blockchain";
 import { transactionController } from "../controller/transaction";
 
@@ -29,7 +27,6 @@ export class Serveur{
                 console.log('server error:', err)
             })
             const url = req.url ? req.url.split('/') : ""
-            console.log('->>>',url)
             if(url ===""){
                 res.statusCode = 404;
                 res.end("404 Not Found");

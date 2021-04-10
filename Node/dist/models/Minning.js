@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -34,10 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Minning = void 0;
 var crypto_1 = require("crypto");
 var Block_1 = require("./Block");
 var BlockChain_1 = require("./BlockChain");
+var Wallet_1 = __importDefault(require("./Wallet"));
 var timer = function (ms) { return new Promise(function (res) { return setTimeout(res, ms); }); };
 var howManyZero = function (howManyZero) {
     if (howManyZero === void 0) { howManyZero = 3; }
@@ -50,6 +56,12 @@ var howManyZero = function (howManyZero) {
 var Minning = /** @class */ (function () {
     function Minning() {
         this.block = new Block_1.Block(new Date, "0");
+        this.block.miner = crypto_1.createHash('sha256').update(Wallet_1.default.getPublicKey()).digest("hex");
+        if (BlockChain_1.blockChain.length() > 0) {
+            var year = new Date(BlockChain_1.blockChain.getFirstBlock().date).getFullYear();
+            var yeaNow = new Date().getFullYear();
+            this.block.reward /= Math.pow(2, year - yeaNow);
+        }
     }
     Minning.prototype.findHash = function () {
         return __awaiter(this, void 0, void 0, function () {

@@ -2,10 +2,12 @@ import { Transaction } from "./Transaction";
 
 export class Block {
     date: Date;
-    hash: String = '';
-    preHash: String;
+    hash: string = '';
+    preHash: string;
     nonce: number = 0;
     transactions: Array<Transaction> = [];
+    miner: string = ""
+    reward: number = 50;
     constructor(date: Date , preHash: string){
         this.date = date;
         this.preHash = preHash;
@@ -14,4 +16,3 @@ export class Block {
         this.nonce++
     }
 }
-

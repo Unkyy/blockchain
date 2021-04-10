@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -37,25 +38,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.transactionController = void 0;
 var pendingTransation_1 = __importDefault(require("../models/pendingTransation"));
-exports.transactionController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
+var Transaction_1 = require("../models/Transaction");
+var transactionController = function (req, res, client) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         req.on('data', function (chunk) {
             var data = JSON.parse(chunk.toString());
             //console.log(req.rawHeaders[1].split(':')[0])
             //console.log(req.rawHeaders)
             //
-            if (!pendingTransation_1.default.alreadySend(data)) {
-                pendingTransation_1.default.setTransation(data);
-                client.sendAllPeer(data, "/transaction");
+            data.amount = parseFloat(data.amount);
+            var test = new Transaction_1.Transaction(data);
+            if (pendingTransation_1.default.addTransaction(data)) {
+                //pendingTransation.setTransation(data)
+                //client.sendAllPeer(data, "/transaction")
                 //console.log(pendingTransation.getTransaction())
             }
         });
-        console.log('yesss');
-        res.write(JSON.stringify(pendingTransation_1.default.getTransaction()));
-        res.end(200);
+        //res.write(JSON.stringify(pendingTransation.getTransaction()))
+        res.end();
         return [2 /*return*/];
     });
 }); };
+exports.transactionController = transactionController;

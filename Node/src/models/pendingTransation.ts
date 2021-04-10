@@ -2,26 +2,30 @@ import { type } from "os"
 import { Transaction } from "./Transaction"
 
 class PendingTransation {
-    private transaction: Array<Transaction> = []
+    private transactions: Array<Transaction> = []
     constructor(){
     }
-    private verifTransaction(transaction: Transaction): boolean{
+    private validTransaction(transaction: Transaction): boolean{
         return true
     }
-    alreadySend(transaction: Transaction): boolean{
-        if(this.transaction.length === 0){
-            return false
+    addTransaction(transaction: Transaction): boolean{
+        if(this.transactions.some(elem => elem.hash === transaction.hash)){
+            return false;
         }
-        return this.transaction.map(elem => JSON.stringify(elem)).includes(JSON.stringify(transaction))
+        if(this.validTransaction(transaction)){
+            this.pushTransation(transaction)
+            return true
+        }
+        return false;
     }
-    getTransaction (): Array<Transaction>{
-        return this.transaction
+    getTransactionPool (): Array<Transaction>{
+        return this.transactions
     }
-    setTransation(transaction: Transaction){
+
+    private pushTransation(transaction: Transaction){
         const require = ["amount","user","password","hash","datetime"]
         //console.log('------',transaction.getKey)
-        this.transaction.push(transaction);
-        //console.log(this.transaction)
+        this.transactions.push(transaction);
     }
 }
 export default new PendingTransation()

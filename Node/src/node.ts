@@ -2,6 +2,7 @@ import { Serveur } from "./core/Serveur";
 import { IPv4 } from "./core/IPv4";
 import { PeerList } from "./core/PeersList";
 import { Client } from "./core/Client";
+import  wallet  from "./models/Wallet";
 
 
 (async() => {
@@ -9,6 +10,8 @@ import { Client } from "./core/Client";
     const peers = ipv4.send();
     const client = new Client(peers);
     const serveur = new Serveur(5000,client).launch();
-
+    const publickey = wallet.getPublicKey()
+    //console.log(wallet.sign("test",publickey))
 })()
+
 

@@ -10,10 +10,15 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.blockChain = exports.BlockChain = void 0;
 var Block_1 = require("./Block");
 var crypto_1 = require("crypto");
 var Minning_1 = require("./Minning");
+var Wallet_1 = __importDefault(require("./Wallet"));
 var BlockChain = /** @class */ (function () {
     function BlockChain() {
         this.blocks = [];
@@ -23,7 +28,7 @@ var BlockChain = /** @class */ (function () {
         //if(!blocks) return false;
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
-        console.log(this.addBlock(block));
+        this.addBlock(block);
         return false;
         // return true
     };
@@ -49,13 +54,10 @@ var BlockChain = /** @class */ (function () {
         return true;
     };
     BlockChain.prototype.validblock = function (block) {
-    };
-    BlockChain.prototype.addBlock = function (block) {
         var element = block;
         var verifElement = __assign({}, block);
         verifElement.hash = '';
         var posthash = this.blocks[this.blocks.length - 1] ? this.blocks[this.blocks.length - 1].hash : "0";
-        console.log(posthash);
         var hash = crypto_1.createHash('sha256').update(JSON.stringify(verifElement)).digest("hex");
         if (block.preHash == "0" && this.blocks.length > 0)
             return false;
@@ -65,13 +67,24 @@ var BlockChain = /** @class */ (function () {
             return false;
         if (!Minning_1.Minning.validHash(hash))
             return false;
+        //valider la reward
+        return true;
+    };
+    BlockChain.prototype.addBlock = function (block) {
+        if (this.validblock(block))
+            return false;
         this.blocks.push(block);
-        console.log(this.blocks);
+        console.log('block ', crypto_1.createHash('sha256').update(JSON.stringify(this.blocks)).digest("hex"));
+        console.log(exports.blockChain.length());
+        Wallet_1.default.getMoney();
         return true;
     };
     BlockChain.prototype.getLastBlock = function () {
         var block = this.blocks[this.blocks.length - 1];
         return block ? block : new Block_1.Block(new Date, "0");
+    };
+    BlockChain.prototype.getFirstBlock = function () {
+        return this.blocks[0];
     };
     BlockChain.prototype.getAllBlock = function () {
         return this.blocks;

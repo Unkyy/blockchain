@@ -1,8 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http"
 import { Client } from "../core/Client"
-import { blockChain } from "../models/BlockChain"
-import { Minning } from "../models/Minning"
 import pendingTransation from "../models/pendingTransation"
+import { Transaction } from "../models/Transaction"
 
 
 export const transactionController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
@@ -11,13 +10,14 @@ export const transactionController = async (req: IncomingMessage, res: ServerRes
         //console.log(req.rawHeaders[1].split(':')[0])
         //console.log(req.rawHeaders)
         //
-        if(!pendingTransation.alreadySend(data)){
-            pendingTransation.setTransation(data)
-            client.sendAllPeer(data, "/transaction")
+        data.amount =  parseFloat(data.amount)
+        const test = new Transaction(data)
+        if(pendingTransation.addTransaction(data)){
+            //pendingTransation.setTransation(data)
+            //client.sendAllPeer(data, "/transaction")
             //console.log(pendingTransation.getTransaction())
         }
     })
-    console.log('yesss')
-    res.write(JSON.stringify(pendingTransation.getTransaction()))
-    res.end(200)
+    //res.write(JSON.stringify(pendingTransation.getTransaction()))
+    res.end()
 }
