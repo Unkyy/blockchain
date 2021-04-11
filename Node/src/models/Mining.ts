@@ -19,7 +19,7 @@ export class Mining {
     static zero: string = howManyZero();
     constructor(){
         this.block = new Block(new Date,"0")
-        this.block.miner = createHash('sha256').update(wallet.getPublicKey()).digest("hex");
+        this.block.miner = createHash('sha256').update(wallet.getRandPublicKey()).digest("hex");
         if(blockChain.length() > 0){
             let year = new Date(blockChain.getFirstBlock().date).getFullYear()
             let yeaNow = new Date().getFullYear()

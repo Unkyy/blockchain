@@ -32,6 +32,8 @@ services:
     deploy:
       replicas: 2
     command: npm start
+    environment: 
+      NODE_ENV: development
   front-react:
     build: ./docker/react
     restart: always

@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -39,7 +38,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mining = void 0;
 var crypto_1 = require("crypto");
 var Block_1 = require("./Block");
 var BlockChain_1 = require("./BlockChain");
@@ -56,7 +54,7 @@ var howManyZero = function (howManyZero) {
 var Mining = /** @class */ (function () {
     function Mining() {
         this.block = new Block_1.Block(new Date, "0");
-        this.block.miner = crypto_1.createHash('sha256').update(Wallet_1.default.getPublicKey()).digest("hex");
+        this.block.miner = crypto_1.createHash('sha256').update(Wallet_1.default.getRandPublicKey()).digest("hex");
         if (BlockChain_1.blockChain.length() > 0) {
             var year = new Date(BlockChain_1.blockChain.getFirstBlock().date).getFullYear();
             var yeaNow = new Date().getFullYear();

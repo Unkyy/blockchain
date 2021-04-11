@@ -10,7 +10,7 @@ import  wallet  from "./models/Wallet";
     const peers = ipv4.send();
     const client = new Client(peers);
     const serveur = new Serveur(5000,client).launch();
-    const publickey = wallet.getPublicKey()
+
     //console.log(wallet.sign("test",publickey))
 })()
 

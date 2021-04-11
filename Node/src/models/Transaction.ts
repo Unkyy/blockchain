@@ -1,28 +1,36 @@
+import { Input } from "./Input";
+import { Output } from "./Output";
+
 type TransactionType = {
     inputs: Array<Input>;
     outputs: Array<Output>;
     hash: string;
-    datetime: Date;
+    TotalInput: string;
+    TotalOutput: string;
+}
+
+export type TransactionRequest = {
+    amount: number;
+    toAddress: string;
+}
+export type InputOutputType = {
+    inputs: Array<Input>;
+    outputs: Array<Output>;
 }
 export class Transaction {
-    amount: number;
-    user: string;
-    outputs: Array<Output>;
+    hash?: string;
     inputs: Array<Input>;
-    hash: string;
+    outputs: Array<Output>;
     datetime: Date;
-    constructor(arg: Transaction)
+    constructor(arg: InputOutputType)
     {
-        this.amount = arg.amount;        
-        this.user = arg.user;
         this.outputs = arg.outputs;
         this.inputs = arg.inputs;
-        this.hash = arg.hash;        
-        this.datetime = arg.datetime;       
-        console.log(this)
-        console.log(this.test())
+        this.datetime = new Date();  
+        // console.log(this)
+        // console.log(this.test())
     }
-    test(){
-        return this.amount + this.amount
-    }
+    // test(){
+    //     return this.amount + this.amount
+    // }
 }

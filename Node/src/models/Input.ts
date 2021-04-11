@@ -4,7 +4,7 @@ type InputType = {
     fromAddress: string
     scriptSig: string
 }
-class Input {
+export class Input {
     preOutPut: string
     amount: number
     fromAddress: string

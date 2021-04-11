@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Input = /** @class */ (function () {
     function Input(arg) {
         this.preOutPut = arg.preOutPut;
@@ -8,3 +9,4 @@ var Input = /** @class */ (function () {
     }
     return Input;
 }());
+exports.Input = Input;

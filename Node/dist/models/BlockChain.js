@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.blockChain = exports.BlockChain = void 0;
 var Block_1 = require("./Block");
 var crypto_1 = require("crypto");
 var Mining_1 = require("./Mining");
@@ -28,8 +27,8 @@ var BlockChain = /** @class */ (function () {
         //if(!blocks) return false;
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
-        this.addBlock(block);
-        return false;
+        return this.addBlock(block);
+        //return false
         // return true
     };
     BlockChain.prototype.findMatchIndex = function () {
@@ -68,10 +67,11 @@ var BlockChain = /** @class */ (function () {
         if (!Mining_1.Mining.validHash(hash))
             return false;
         //valider la reward
+        console.log('valid');
         return true;
     };
     BlockChain.prototype.addBlock = function (block) {
-        if (this.validblock(block))
+        if (!this.validblock(block))
             return false;
         this.blocks.push(block);
         console.log('block ', crypto_1.createHash('sha256').update(JSON.stringify(this.blocks)).digest("hex"));

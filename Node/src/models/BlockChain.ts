@@ -11,8 +11,8 @@ export class BlockChain {
         //if(!blocks) return false;
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
-        this.addBlock(block)
-        return false
+        return this.addBlock(block)
+        //return false
        // return true
     }
     findMatchIndex(){
@@ -44,10 +44,11 @@ export class BlockChain {
         if(posthash !== element.preHash) return false
         if(!Mining.validHash(hash)) return false
         //valider la reward
+        console.log('valid')
         return true
     }
     addBlock(block: Block): boolean{
-        if(this.validblock(block)) return false
+        if(!this.validblock(block)) return false
         this.blocks.push(block)
         console.log('block ',createHash('sha256').update(JSON.stringify(this.blocks)).digest("hex"));
         console.log(blockChain.length())
