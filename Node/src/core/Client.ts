@@ -39,14 +39,6 @@ export class Client {
                     res.on('finish',() => {
                         console.log('--------------')
                     })
-                    res.on('data',(chunk: Buffer) => {
-                       // console.log('----')
-                        const data: Block = JSON.parse(chunk.toString())
-                        blockChain.mergreBlock(data)
-                        //console.log('client :  ',data)
-                        //console.log('----')
-    
-                    })
                 });
                 req.on('error', (err) => {
                     const serveur = http.request({

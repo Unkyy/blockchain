@@ -41,6 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var crypto_1 = require("crypto");
 var Block_1 = require("./Block");
 var BlockChain_1 = require("./BlockChain");
+var TransactionReward_1 = require("./TransactionReward");
+var TransationPool_1 = __importDefault(require("./TransationPool"));
 var Wallet_1 = __importDefault(require("./Wallet"));
 var timer = function (ms) { return new Promise(function (res) { return setTimeout(res, ms); }); };
 var howManyZero = function (howManyZero) {
@@ -63,16 +65,24 @@ var Mining = /** @class */ (function () {
     }
     Mining.prototype.findHash = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var hash;
+            var hash, output;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.block.preHash = BlockChain_1.blockChain.getLastBlock().hash ? BlockChain_1.blockChain.getLastBlock().hash : "0";
                         hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
+                        output = {
+                            outPutAddress: "",
+                            amount: this.block.reward,
+                            toAddress: this.block.miner,
+                            publicKey: ""
+                        };
+                        TransationPool_1.default.addTransaction(new TransactionReward_1.TransactionReward(output));
                         _a.label = 1;
                     case 1:
                         if (!!Mining.validHash(hash)) return [3 /*break*/, 3];
                         this.block.incrementNonce();
+                        this.block.transactions = TransationPool_1.default.getTransactionPool();
                         hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
                         return [4 /*yield*/, timer(10)
                             //console.log(this.block)
@@ -82,6 +92,7 @@ var Mining = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 1];
                     case 3:
+                        TransationPool_1.default.resetTransactionPool();
                         this.block.hash = hash;
                         return [2 /*return*/, this.block];
                 }

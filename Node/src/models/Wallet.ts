@@ -3,12 +3,11 @@ import { createHash, Signer } from "crypto";
 import { blockChain } from "./BlockChain";
 import { Input } from "./Input";
 import { Output } from "./Output";
-import { InputOutputType, Transaction, TransactionRequest } from "./Transaction";
 const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);
 }
 
-const getHash = (elem: string) => createHash('sha256').update(elem).digest("hex");
+export const getHash = (elem: string) => createHash('sha256').update(elem).digest("hex");
 class Wallet {
     KeysPair: Array<crypto.KeyPairSyncResult<string, string>>
     numKeysPair: number
@@ -62,56 +61,56 @@ class Wallet {
     }
     // generateInputOutput(transactionRequest: TransactionRequest ){
     // }
-    CreateTransaction(transactionRequest: TransactionRequest ){
-      const blocks = blockChain.getAllBlock()
-      let inputs:Array<Input> = [];
-      let outputs:Array<Output> = [];
-      let rest;
-      let transactionRequestRest = transactionRequest.amount;
-      for(let i = 0; i < blocks.length; i++){
-        rest = blocks[i].reward - transactionRequestRest
-        const amount = rest < 0 ? transactionRequestRest + rest : transactionRequestRest
-        const input = {
-          preOutPut: blocks[i].hash,
-          amount: amount,
-          fromAddress: blocks[i].miner,
-        } 
-        const [scriptSig, publicKey] = this.sign(JSON.stringify(input), blocks[i].miner)
-        if(scriptSig !== undefined && publicKey !== undefined){
-          const output = {
-            inputAddress: getHash(JSON.stringify(input)),
-            amount: amount,
-            toAddress: transactionRequest.toAddress,
-            publicKey: publicKey
-          }
+    // CreateTransaction(transactionRequest: TransactionRequest ){
+    //   const blocks = blockChain.getAllBlock()
+    //   let inputs:Array<Input> = [];
+    //   let outputs:Array<Output> = [];
+    //   let rest;
+    //   let transactionRequestRest = transactionRequest.amount;
+    //   for(let i = 0; i < blocks.length; i++){
+    //     rest = blocks[i].reward - transactionRequestRest
+    //     const amount = rest < 0 ? transactionRequestRest + rest : transactionRequestRest
+    //     const input = {
+    //       preOutPut: blocks[i].hash,
+    //       amount: amount,
+    //       fromAddress: blocks[i].miner,
+    //     } 
+    //     const [scriptSig, publicKey] = this.sign(JSON.stringify(input), blocks[i].miner)
+    //     if(scriptSig !== undefined && publicKey !== undefined){
+    //       const output = {
+    //         inputAddress: getHash(JSON.stringify(input)),
+    //         amount: amount,
+    //         toAddress: transactionRequest.toAddress,
+    //         publicKey: publicKey
+    //       }
 
-          const outPutAddress = getHash(JSON.stringify(output));
-          const test = new Input({...input, scriptSig})
-          inputs.push(new Input({...input, scriptSig}))
-          outputs.push(new Output({...output, outPutAddress: outPutAddress}))
-          if(rest > 0){
-            const output = {
-              inputAddress: getHash(JSON.stringify(input)),
-              amount: rest,
-              toAddress: blocks[i].miner,
-              publicKey: publicKey
-            }
-            const outPutAddress = getHash(JSON.stringify(output));
-            outputs.push(new Output({...output, outPutAddress: outPutAddress}))
-            break
-          }
-          if(rest === 0){
-            break
-          }
-          transactionRequestRest = Math.abs(rest)
-        }
-      }
-      const transaction: InputOutputType = {
-        inputs: inputs,
-        outputs:outputs
-      }
-      return new Transaction(transaction)
-    }
+    //       const outPutAddress = getHash(JSON.stringify(output));
+    //       const test = new Input({...input, scriptSig})
+    //       inputs.push(new Input({...input, scriptSig}))
+    //       outputs.push(new Output({...output, outPutAddress: outPutAddress}))
+    //       if(rest > 0){
+    //         const output = {
+    //           inputAddress: getHash(JSON.stringify(input)),
+    //           amount: rest,
+    //           toAddress: blocks[i].miner,
+    //           publicKey: publicKey
+    //         }
+    //         const outPutAddress = getHash(JSON.stringify(output));
+    //         outputs.push(new Output({...output, outPutAddress: outPutAddress}))
+    //         break
+    //       }
+    //       if(rest === 0){
+    //         break
+    //       }
+    //       transactionRequestRest = Math.abs(rest)
+    //     }
+    //   }
+    //   const transaction: InputOutputType = {
+    //     inputs: inputs,
+    //     outputs:outputs
+    //   }
+    //   return new Transaction(transaction)
+    // }
 }
 
 export default new Wallet()

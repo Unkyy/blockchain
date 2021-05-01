@@ -39,15 +39,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var BlockChain_1 = require("../models/BlockChain");
 exports.blockChainController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        req.on('data', function (chunk) {
+        req.on('finish', function (chunk) {
             var data = JSON.parse(chunk.toString());
+            //console.log('serveur -> ',data.transactions.outputs)
             //console.log(req.rawHeaders[1].split(':')[0])
             //console.log(req.rawHeaders)
             //this.client.updateBlockChain(data)
             if (BlockChain_1.blockChain.mergreBlock(data)) {
                 client.sendAllPeer(data, "/blockchain");
             }
-            //console.log('serveur',data)
             //this.handleBlochain(data)
             //client.sendAllPeer(data,"/blockchain")
         });

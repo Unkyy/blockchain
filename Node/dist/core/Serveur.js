@@ -94,16 +94,17 @@ var Serveur = /** @class */ (function () {
     };
     Serveur.prototype.handlemining = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var mining;
+            var block;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!true) return [3 /*break*/, 2];
                         return [4 /*yield*/, new Mining_1.Mining().findHash()];
                     case 1:
-                        mining = _a.sent();
-                        BlockChain_1.blockChain.addBlock(mining);
-                        this.client.sendAllPeer(mining, '/blockchain');
+                        block = _a.sent();
+                        BlockChain_1.blockChain.addBlock(block);
+                        //console.log(block)
+                        this.client.sendAllPeer(block, '/blockchain');
                         return [3 /*break*/, 0];
                     case 2: return [2 /*return*/];
                 }

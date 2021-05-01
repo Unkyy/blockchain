@@ -6,8 +6,10 @@ var Output = /** @class */ (function () {
         this.amount = arg.amount;
         this.toAddress = arg.toAddress;
         this.publicKey = arg.publicKey;
-        this.inputAddress = arg.inputAddress;
     }
+    Output.prototype.gettest = function () {
+        return 0;
+    };
     return Output;
 }());
 exports.Output = Output;

@@ -1,7 +1,9 @@
 import { createHash } from "crypto";
-import { copyFile } from "fs";
 import { Block } from "./Block";
 import { blockChain } from "./BlockChain";
+import { Output } from "./Output";
+import { TransactionReward } from "./TransactionReward";
+import transationPool from "./TransationPool";
 import  wallet  from "./Wallet";
 
 
@@ -29,15 +31,23 @@ export class Mining {
     async findHash(){
         this.block.preHash  =  blockChain.getLastBlock().hash ? blockChain.getLastBlock().hash : "0"
         let hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
-        
+        const output = {
+            outPutAddress: "",
+            amount: this.block.reward,
+            toAddress: this.block.miner,
+            publicKey:""
+        }
+        transationPool.addTransaction(new TransactionReward(output))
+        //console.log(transationPool)
         while(!Mining.validHash(hash)){
             this.block.incrementNonce()
+            this.block.transactions = transationPool.getTransactionPool()
             hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
             await timer(10)
-            
             //console.log(this.block)
             //console.log(hash)
         }
+        transationPool.resetTransactionPool()
         this.block.hash = hash
         return this.block
     }

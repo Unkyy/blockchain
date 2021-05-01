@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from "http"
 import { Client } from "../core/Client"
-import pendingTransation from "../models/PendingTransation"
-import { Transaction } from "../models/Transaction"
-import wallet from "../models/Wallet"
+import { TransactionRequest } from "../models/TransactionRequest"
+import transactionPool from "../models/TransationPool"
+const util = require('util')
 
 
 export const transactionController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
@@ -12,7 +12,9 @@ export const transactionController = async (req: IncomingMessage, res: ServerRes
         //console.log(req.rawHeaders)
         //
         data.amount =  parseFloat(data.amount)
-        console.log(wallet.CreateTransaction(data))
+        const transaction = new TransactionRequest(data)
+        transactionPool.addTransaction(transaction)
+        console.log('-->>',util.inspect(transactionPool, {showHidden: false, depth: null}))
         //const test = new Transaction(data)
         //if(pendingTransation.addTransaction(data)){
             //pendingTransation.setTransation(data)

@@ -39,7 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var Wallet_1 = __importDefault(require("../models/Wallet"));
+var TransactionRequest_1 = require("../models/TransactionRequest");
+var TransationPool_1 = __importDefault(require("../models/TransationPool"));
+var util = require('util');
 exports.transactionController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         req.on('data', function (chunk) {
@@ -48,7 +50,9 @@ exports.transactionController = function (req, res, client) { return __awaiter(_
             //console.log(req.rawHeaders)
             //
             data.amount = parseFloat(data.amount);
-            console.log(Wallet_1.default.CreateTransaction(data));
+            var transaction = new TransactionRequest_1.TransactionRequest(data);
+            TransationPool_1.default.addTransaction(transaction);
+            console.log('-->>', util.inspect(TransationPool_1.default, { showHidden: false, depth: null }));
             //const test = new Transaction(data)
             //if(pendingTransation.addTransaction(data)){
             //pendingTransation.setTransation(data)

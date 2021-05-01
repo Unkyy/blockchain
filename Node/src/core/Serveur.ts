@@ -54,9 +54,10 @@ export class Serveur{
     }
     async handlemining(){
         while(true){
-            const mining = await new Mining().findHash()
-            blockChain.addBlock(mining)
-            this.client.sendAllPeer(mining,'/blockchain')
+            const block = await new Mining().findHash()
+            blockChain.addBlock(block)
+            //console.log(block)
+            this.client.sendAllPeer(block,'/blockchain')
         }
     }
 }

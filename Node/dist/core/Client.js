@@ -44,7 +44,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var IPv4_1 = require("./IPv4");
 var http = __importStar(require("http"));
-var BlockChain_1 = require("../models/BlockChain");
 var Client = /** @class */ (function () {
     function Client(peerList) {
         this.peerConnection = [];
@@ -85,13 +84,6 @@ var Client = /** @class */ (function () {
                                             //})
                                             res.on('finish', function () {
                                                 console.log('--------------');
-                                            });
-                                            res.on('data', function (chunk) {
-                                                // console.log('----')
-                                                var data = JSON.parse(chunk.toString());
-                                                BlockChain_1.blockChain.mergreBlock(data);
-                                                //console.log('client :  ',data)
-                                                //console.log('----')
                                             });
                                         });
                                         req.on('error', function (err) {
