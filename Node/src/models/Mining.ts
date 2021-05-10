@@ -1,7 +1,6 @@
 import { createHash } from "crypto";
 import { Block } from "./Block";
 import { blockChain } from "./BlockChain";
-import { Output } from "./Output";
 import { TransactionReward } from "./TransactionReward";
 import transationPool from "./TransationPool";
 import  wallet  from "./Wallet";
@@ -32,7 +31,6 @@ export class Mining {
         this.block.preHash  =  blockChain.getLastBlock().hash ? blockChain.getLastBlock().hash : "0"
         let hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
         const output = {
-            outPutAddress: "",
             amount: this.block.reward,
             toAddress: this.block.miner,
             publicKey:""

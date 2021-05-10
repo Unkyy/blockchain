@@ -13,8 +13,9 @@ export const transactionController = async (req: IncomingMessage, res: ServerRes
         //
         data.amount =  parseFloat(data.amount)
         const transaction = new TransactionRequest(data)
+        //console.log(transaction)
         transactionPool.addTransaction(transaction)
-        console.log('-->>',util.inspect(transactionPool, {showHidden: false, depth: null}))
+        //console.log('-->>',util.inspect(transactionPool, {showHidden: false, depth: null}))
         //const test = new Transaction(data)
         //if(pendingTransation.addTransaction(data)){
             //pendingTransation.setTransation(data)

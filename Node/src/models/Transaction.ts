@@ -1,8 +1,11 @@
-import { Input } from "./Input";
-import { Output, OutputType } from "./Output";
+import { OutputType } from "./Output";
+import unspentTransactions from "./UnspentTransactions";
 import { getHash } from "./Wallet";
+
+
+const util = require('util')
 type TransactionType = {
-    inputs: Array<Input>;
+    inputs: Array<InputType>;
     outputs: Array<OutputType>;
     hash: string;
     TotalInput: string;
@@ -13,10 +16,10 @@ type TransactionType = {
 
 export class Transaction {
     hash: string;
-    inputs: Array<Input>;
+    inputs: Array<InputType>;
     outputs: Array<OutputType>;
     datetime: Date;
-    constructor(inputs: Array<Input>, outputs: Array<OutputType>)
+    constructor(inputs: Array<InputType>, outputs: Array<OutputType>)
     {
         this.inputs = inputs;
         this.outputs = outputs;

@@ -38,23 +38,20 @@ var Wallet = /** @class */ (function () {
                 .digest("hex"));
         }
     }
-    Wallet.prototype.getKeysPair = function (address) {
+    Wallet.prototype.getKeysPairWithAddress = function (address) {
         return this.KeysPair.find(function (keyspair) { return exports.getHash(keyspair.publicKey) === address; });
+    };
+    Wallet.prototype.getPrivateKey = function (publicKey) {
+        return this.KeysPair.find(function (keyspair) { return keyspair.publicKey === publicKey; });
     };
     Wallet.prototype.getRandPublicKey = function () {
         return this.KeysPair[getRandomInt(this.numKeysPair)].publicKey;
     };
-    Wallet.prototype.sign = function (document, address) {
-        var pair = this.getKeysPair(address);
-        if (pair === undefined)
-            return [];
+    Wallet.prototype.sign = function (document, keysPair) {
         var signer = crypto_1.default.createSign('RSA-SHA256');
         signer.write(document);
         signer.end();
-        return [
-            signer.sign({ 'key': pair.privateKey, 'passphrase': this.passphrase }, 'base64'),
-            pair.publicKey
-        ];
+        return signer.sign({ 'key': keysPair.privateKey, 'passphrase': this.passphrase }, 'base64');
     };
     Wallet.prototype.getMoney = function () {
         var _this = this;

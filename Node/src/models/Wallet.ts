@@ -1,8 +1,6 @@
 import crypto from "crypto"
 import { createHash, Signer } from "crypto";
 import { blockChain } from "./BlockChain";
-import { Input } from "./Input";
-import { Output } from "./Output";
 const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);
 }
@@ -38,23 +36,23 @@ class Wallet {
             .digest("hex"))
         }
     }
-    getKeysPair(address: string): crypto.KeyPairSyncResult<string, string>| undefined{
-        return this.KeysPair.find(keyspair => getHash(keyspair.publicKey) === address)
+    getKeysPairWithAddress(address: string): crypto.KeyPairSyncResult<string, string>| undefined{
+      return this.KeysPair.find(keyspair => getHash(keyspair.publicKey) === address)
+    }
+    getPrivateKey(publicKey: string): crypto.KeyPairSyncResult<string, string>| undefined{
+      return this.KeysPair.find(keyspair => keyspair.publicKey === publicKey)
     }
     getRandPublicKey() {
       return this.KeysPair[getRandomInt(this.numKeysPair)].publicKey
     }
-    sign(document: string, address: string): [string,string] | [] {
-      const pair = this.getKeysPair(address)
-      if(pair === undefined) return []
+  
+    sign(document: string, keysPair: crypto.KeyPairSyncResult<string, string>): string  {
       const signer = crypto.createSign('RSA-SHA256');
       signer.write(document)
       signer.end()
-      return  [
-        signer.sign({ 'key': pair.privateKey, 'passphrase': this.passphrase }, 'base64'),
-        pair.publicKey
-      ]
+      return  signer.sign({ 'key': keysPair.privateKey, 'passphrase': this.passphrase }, 'base64')
     }
+
     getMoney(){
       const myReward = blockChain.getAllBlock().filter(elem => this.address.includes(elem.miner))
       console.log('money : ',myReward.reduce( ( sum, { reward } ) => sum + reward , 0)+' |≠|')

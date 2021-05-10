@@ -4,7 +4,7 @@ import { Mining } from "./Mining";
 import wallet from "./Wallet";
 
 export class BlockChain {
-    blocks: Array<Block> = []
+    private blocks: Array<Block> = []
     constructor(){}
     mergreBlock(block: Block): Boolean{
         const blocks = blockChain.getAllBlock()

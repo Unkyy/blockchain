@@ -1,8 +1,8 @@
-import { Input } from "./Input";
-import { Output } from "./Output";
+import { OutputType } from "./Output";
 import { Transaction } from "./Transaction";
-import transationPool from "./TransationPool";
+import unspentTransactions from "./UnspentTransactions";
 import wallet, { getHash } from "./Wallet";
+const util = require('util')
 
 export type TransactionRequestType = {
     amount: number;
@@ -11,44 +11,40 @@ export type TransactionRequestType = {
 
 export class TransactionRequest extends Transaction {
     constructor (transactionRequest: TransactionRequestType){
-        const transactionPool = transationPool.getTransactionPool()
-        let inputs:Array<Input> = [];
-        let outputs:Array<Output> = [];
+        const UnspentTransacts = unspentTransactions.getTransactions()
+        let inputs:Array<InputType> = [];
+        let outputs:Array<OutputType> = [];
         let rest;
         let transactionRequestRest = transactionRequest.amount;
-        for(let i = 0; i < transactionPool.length; i++){
-          rest = transactionPool[i].outputs[0].amount - transactionRequestRest
+        for(let i = 0; i < UnspentTransacts.length; i++){
+          const preOutputIndex = UnspentTransacts[i].outputs.findIndex(elem => wallet.getKeysPairWithAddress(elem.toAddress) !== undefined)
+          const preOutput = UnspentTransacts[i].outputs[preOutputIndex]
+          if(preOutput === undefined || preOutput.toAddress === undefined) continue;
+          rest = UnspentTransacts[i].outputs[0].amount - transactionRequestRest
           const amount = rest < 0 ? transactionRequestRest + rest : transactionRequestRest
-          const output = transactionPool[i].outputs.find( elem => wallet.getKeysPair(elem.toAddress) !== undefined)
-          if(!output) continue;
-          const input = {
-            preHashTransaction: transactionPool[i].hash,
-            outPut: output.outPutAddress,
+          let input: InputType = {
+            txHash: UnspentTransacts[i].hash,
+            IndexOutput: preOutputIndex,
+            address: preOutput.toAddress,
             amount: amount,
-            fromAddress: transactionPool[i].outputs[0].outPutAddress,
           } 
-          const [scriptSig, publicKey] = wallet.sign(JSON.stringify(input), output.toAddress)
-          if(scriptSig !== undefined && publicKey !== undefined){
-            const output = {
-              inputAddress: getHash(JSON.stringify(input)),
+          const keysPair = wallet.getKeysPairWithAddress(preOutput.toAddress)
+          if(keysPair !== undefined){
+            let output: OutputType = {
               amount: amount,
               toAddress: transactionRequest.toAddress,
-              publicKey: publicKey
+              publicKey: keysPair.publicKey
             }
-  
-            const outPutAddress = getHash(JSON.stringify(output));
-            const test = new Input({...input, scriptSig})
-            inputs.push(new Input({...input, scriptSig}))
-            outputs.push(new Output({...output, outPutAddress: outPutAddress}))
+            outputs.push(output)
+            input.scriptSig = wallet.sign(getHash(JSON.stringify([input,output])),keysPair)
+            inputs.push(input)
             if(rest > 0){
-              const output = {
-                inputAddress: getHash(JSON.stringify(input)),
-                amount: rest,
-                toAddress: transactionPool[i].outputs[0].toAddress,
-                publicKey: publicKey
+              const output: OutputType  = {
+                amount: rest, 
+                toAddress: preOutput.toAddress,
+                publicKey: keysPair.publicKey
               }
-              const outPutAddress = getHash(JSON.stringify(output));
-              outputs.push(new Output({...output, outPutAddress: outPutAddress}))
+              outputs.push(output)
               break
             }
             if(rest === 0){
@@ -58,6 +54,7 @@ export class TransactionRequest extends Transaction {
           }
         }
         super(inputs,outputs)
+        console.log(this)
     }
     
 }

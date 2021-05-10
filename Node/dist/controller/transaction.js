@@ -51,8 +51,9 @@ exports.transactionController = function (req, res, client) { return __awaiter(_
             //
             data.amount = parseFloat(data.amount);
             var transaction = new TransactionRequest_1.TransactionRequest(data);
+            //console.log(transaction)
             TransationPool_1.default.addTransaction(transaction);
-            console.log('-->>', util.inspect(TransationPool_1.default, { showHidden: false, depth: null }));
+            //console.log('-->>',util.inspect(transactionPool, {showHidden: false, depth: null}))
             //const test = new Transaction(data)
             //if(pendingTransation.addTransaction(data)){
             //pendingTransation.setTransation(data)

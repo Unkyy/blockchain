@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Output = /** @class */ (function () {
-    function Output(arg) {
-        this.outPutAddress = arg.outPutAddress;
-        this.amount = arg.amount;
-        this.toAddress = arg.toAddress;
-        this.publicKey = arg.publicKey;
-    }
-    Output.prototype.gettest = function () {
-        return 0;
-    };
-    return Output;
-}());
-exports.Output = Output;
+// export class Output {
+//     outPutAddress?: string
+//     amount: number
+//     toAddress: string
+//     publicKey?: string
+//     constructor(arg: OutputType){
+//         this.outPutAddress = arg.outPutAddress 
+//         this.amount = arg.amount
+//         this.toAddress = arg.toAddress
+//         this.publicKey = arg.publicKey
+//     }
+//     gettest(){
+//         return 0
+//     }
+// }

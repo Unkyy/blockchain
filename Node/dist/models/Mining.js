@@ -72,7 +72,6 @@ var Mining = /** @class */ (function () {
                         this.block.preHash = BlockChain_1.blockChain.getLastBlock().hash ? BlockChain_1.blockChain.getLastBlock().hash : "0";
                         hash = crypto_1.createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
                         output = {
-                            outPutAddress: "",
                             amount: this.block.reward,
                             toAddress: this.block.miner,
                             publicKey: ""

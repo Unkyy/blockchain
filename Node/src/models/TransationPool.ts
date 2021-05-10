@@ -1,12 +1,22 @@
 import { type } from "os"
 import { Transaction } from "./Transaction"
+import unspentTransactions from "./UnspentTransactions";
 
 class TransactionPool {
     private transactions: Array<Transaction> = []
-    constructor(){
-    }
-    private validTransaction(transaction: Transaction): boolean{
-        
+    validTransaction(transaction: Transaction): boolean{
+        const unspentTransacts = unspentTransactions.getTransactions()
+        for(let i = 0; i<transaction.inputs.length; i++){
+            const indexOutput = transaction.inputs[i].IndexOutput
+            const txHash = transaction.inputs[i].txHash
+            const unspentTransact = unspentTransacts
+                .find(transactions => transactions.hash === txHash)
+            if(unspentTransact === undefined) return false
+            const output = unspentTransact.outputs
+            if(output === undefined) return false
+
+
+        }
         return true
     }
     addTransaction(transaction: Transaction): boolean{
@@ -23,6 +33,7 @@ class TransactionPool {
         return this.transactions
     }
     resetTransactionPool() {
+        unspentTransactions.addTransactions(this.transactions)
         this.transactions = []
     }
     private pushTransation(transaction: Transaction){

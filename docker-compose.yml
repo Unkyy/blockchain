@@ -30,7 +30,7 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 2
+      replicas: 1
     command: npm start
     environment: 
       NODE_ENV: development
