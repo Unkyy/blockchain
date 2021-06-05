@@ -92,6 +92,7 @@ var Mining = /** @class */ (function () {
                         return [3 /*break*/, 1];
                     case 3:
                         TransationPool_1.default.resetTransactionPool();
+                        console.log(hash);
                         this.block.hash = hash;
                         return [2 /*return*/, this.block];
                 }

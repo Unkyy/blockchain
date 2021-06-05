@@ -1,6 +1,6 @@
 type InputType = {
     txHash: string
-    IndexOutput: number
+    indexOutput: number
     address: string
     amount: number
     scriptSig?: string

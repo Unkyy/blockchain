@@ -46,6 +46,7 @@ export class Mining {
             //console.log(hash)
         }
         transationPool.resetTransactionPool()
+        console.log(hash)
         this.block.hash = hash
         return this.block
     }

@@ -24,7 +24,7 @@ export class TransactionRequest extends Transaction {
           const amount = rest < 0 ? transactionRequestRest + rest : transactionRequestRest
           let input: InputType = {
             txHash: UnspentTransacts[i].hash,
-            IndexOutput: preOutputIndex,
+            indexOutput: preOutputIndex,
             address: preOutput.toAddress,
             amount: amount,
           } 
@@ -54,7 +54,6 @@ export class TransactionRequest extends Transaction {
           }
         }
         super(inputs,outputs)
-        console.log(this)
     }
     
 }

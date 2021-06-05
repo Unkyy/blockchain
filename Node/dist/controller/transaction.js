@@ -51,15 +51,10 @@ exports.transactionController = function (req, res, client) { return __awaiter(_
             //
             data.amount = parseFloat(data.amount);
             var transaction = new TransactionRequest_1.TransactionRequest(data);
-            //console.log(transaction)
-            TransationPool_1.default.addTransaction(transaction);
-            //console.log('-->>',util.inspect(transactionPool, {showHidden: false, depth: null}))
-            //const test = new Transaction(data)
-            //if(pendingTransation.addTransaction(data)){
-            //pendingTransation.setTransation(data)
-            //client.sendAllPeer(data, "/transaction")
-            //console.log(pendingTransation.getTransaction())
-            //}
+            console.log(transaction);
+            if (TransationPool_1.default.addTransaction(transaction)) {
+                client.sendAllPeer(transaction, "/transaction");
+            }
         });
         //res.write(JSON.stringify(pendingTransation.getTransaction()))
         res.end();
