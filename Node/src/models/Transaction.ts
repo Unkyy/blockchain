@@ -1,5 +1,4 @@
 import { OutputType } from "./Output";
-import unspentTransactions from "./UnspentTransactions";
 import { getHash } from "./Wallet";
 
 
@@ -19,18 +18,16 @@ export class Transaction {
     inputs: Array<InputType>;
     outputs: Array<OutputType>;
     datetime: Date;
-    constructor(inputs: Array<InputType>, outputs: Array<OutputType>)
+    constructor(
+        inputs: Array<InputType>, 
+        outputs: Array<OutputType>,
+        datetime?: Date,
+        hash?: string)
     {
         this.inputs = inputs;
         this.outputs = outputs;
-        this.datetime = new Date();
-        this.hash = getHash(JSON.stringify(this));
+        this.datetime = datetime ? datetime : new Date() ;
+        this.hash = hash ? hash : getHash(JSON.stringify(this));
         return this
     }
-
-    // test(){
-    //     return this.amount + this.amount
-    // }
 }
-
-

@@ -42,8 +42,18 @@ const Form = () => {
     }
     return(
         <Fragment>
-            test
+            <label for="number">amount : </label>
+            <input id="number" type="number" ref={coins}></input>
+            <label  for="fname">toAddress :</label>
+            <input id="toAddress"  ref={toAddress}></input>
+            <label for="passphrase">passphrase : </label>
+            <input  id="passphrase"  ref={passphrase}></input>
+            <button onClick={handleClick}>
+                payer
+            </button>
         </Fragment>
     )
 }
 export default Form; 
+
+

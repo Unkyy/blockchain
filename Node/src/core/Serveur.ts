@@ -6,7 +6,7 @@ import { blockChain} from "../models/BlockChain";
 import { Mining } from "../models/Mining";
 import {EventEmitter} from "events"
 import { blockChainController } from "../controller/blockchain";
-import { transactionController } from "../controller/transaction";
+import { transactionCreateController, transactiontransferController } from "../controller/transaction";
 
 export class Serveur{
     mining = false;
@@ -37,8 +37,11 @@ export class Serveur{
             else if(url[1] === "blockchain"){
                 emitter.emit('blockchain',req, res,this.client)
             }
-            else if(url[1] === "transaction"){
-                emitter.emit('transaction',req, res,this.client)
+            else if(url[1] === "transaction" && url[2] ==="create"){
+                emitter.emit('transaction/create',req, res,this.client)
+            }
+            else if(url[1] === "transaction" && url[2] ==="transfer"){
+                emitter.emit('transaction/transfer',req, res,this.client)
             }else {
                 res.statusCode = 404;
                 res.end("404 Not Found");
@@ -50,7 +53,8 @@ export class Serveur{
     launch()  {
         const app = this.App()
         app.on('blockchain',blockChainController)
-        app.on('transaction',transactionController)
+        app.on('transaction/create',transactionCreateController)
+        app.on('transaction/transfer',transactiontransferController)
     }
     async handlemining(){
         while(true){

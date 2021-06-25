@@ -1,25 +1,32 @@
 import { IncomingMessage, ServerResponse } from "http"
 import { Client } from "../core/Client"
+import { Transaction } from "../models/Transaction"
 import { TransactionRequest } from "../models/TransactionRequest"
 import transactionPool from "../models/TransationPool"
 const util = require('util')
 
 
-export const transactionController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
+export const transactionCreateController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
     req.on('data',(chunk: Buffer) => {
         const data = JSON.parse(chunk.toString())
-        //console.log(req.rawHeaders[1].split(':')[0])
-        //console.log(req.rawHeaders)
-        //
         data.amount =  parseFloat(data.amount)
         const transaction = new TransactionRequest(data)
         console.log(transaction)
         if(transactionPool.addTransaction(transaction)){
-            client.sendAllPeer(transaction,"/transaction")
+            client.sendAllPeer(transaction,"/transaction/transfer")
         }
     })
-    //res.write(JSON.stringify(pendingTransation.getTransaction()))
     res.end()
 }
 
-
+export const transactiontransferController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
+    req.on('data',(chunk: Buffer) => {
+        const data: Transaction = JSON.parse(chunk.toString())
+        console.log(data)
+        if(transactionPool.addTransaction(data)){
+            console.log('good')
+            client.sendAllPeer(data,"/transaction/transfer")
+        }
+    })
+    res.end()
+}

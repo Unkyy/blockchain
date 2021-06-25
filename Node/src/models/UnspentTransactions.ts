@@ -16,12 +16,9 @@ class UnspentTransactions {
         transation.inputs.forEach(input => {
             const transactIndex = this.transactions
                 .findIndex(elem =>{
-                    console.log('---->',elem.hash)
-                    console.log('----->',input.txHash)
                     return elem.hash === input.txHash
                 })
             //if(transactIndex === -1) return
-            console.log('test')
             this.transactions[transactIndex].outputs.splice(input.indexOutput)
         })
     }

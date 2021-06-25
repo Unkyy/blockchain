@@ -76,8 +76,11 @@ var Serveur = /** @class */ (function () {
             else if (url[1] === "blockchain") {
                 emitter.emit('blockchain', req, res, _this.client);
             }
-            else if (url[1] === "transaction") {
-                emitter.emit('transaction', req, res, _this.client);
+            else if (url[1] === "transaction" && url[2] === "create") {
+                emitter.emit('transaction/create', req, res, _this.client);
+            }
+            else if (url[1] === "transaction" && url[2] === "transfer") {
+                emitter.emit('transaction/transfer', req, res, _this.client);
             }
             else {
                 res.statusCode = 404;
@@ -90,7 +93,8 @@ var Serveur = /** @class */ (function () {
     Serveur.prototype.launch = function () {
         var app = this.App();
         app.on('blockchain', blockchain_1.blockChainController);
-        app.on('transaction', transaction_1.transactionController);
+        app.on('transaction/create', transaction_1.transactionCreateController);
+        app.on('transaction/transfer', transaction_1.transactiontransferController);
     };
     Serveur.prototype.handlemining = function () {
         return __awaiter(this, void 0, void 0, function () {

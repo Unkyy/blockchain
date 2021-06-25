@@ -41,7 +41,7 @@ services:
       - nodeserver
       - node
     volumes:
-      - "./front-blockchain:/usr/src/app/"
+      - "./react:/usr/src/app/"
     command: yarn start
     ports:
       - "3000:3000"

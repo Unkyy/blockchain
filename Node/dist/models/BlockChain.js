@@ -27,6 +27,7 @@ var BlockChain = /** @class */ (function () {
         //if(!blocks) return false;
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
+        //add transaction !
         return this.addBlock(block);
         //return false
         // return true

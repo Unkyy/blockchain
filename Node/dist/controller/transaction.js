@@ -42,21 +42,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var TransactionRequest_1 = require("../models/TransactionRequest");
 var TransationPool_1 = __importDefault(require("../models/TransationPool"));
 var util = require('util');
-exports.transactionController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
+exports.transactionCreateController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         req.on('data', function (chunk) {
             var data = JSON.parse(chunk.toString());
-            //console.log(req.rawHeaders[1].split(':')[0])
-            //console.log(req.rawHeaders)
-            //
             data.amount = parseFloat(data.amount);
             var transaction = new TransactionRequest_1.TransactionRequest(data);
             console.log(transaction);
             if (TransationPool_1.default.addTransaction(transaction)) {
-                client.sendAllPeer(transaction, "/transaction");
+                client.sendAllPeer(transaction, "/transaction/transfer");
             }
         });
-        //res.write(JSON.stringify(pendingTransation.getTransaction()))
+        res.end();
+        return [2 /*return*/];
+    });
+}); };
+exports.transactiontransferController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        req.on('data', function (chunk) {
+            var data = JSON.parse(chunk.toString());
+            console.log(data);
+            if (TransationPool_1.default.addTransaction(data)) {
+                console.log('good');
+                client.sendAllPeer(data, "/transaction/transfer");
+            }
+        });
         res.end();
         return [2 /*return*/];
     });

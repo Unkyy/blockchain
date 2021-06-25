@@ -17,12 +17,15 @@ class TransactionPool {
             if(unspentTransact === undefined) return false
             const unspentOutput = unspentTransact.outputs[input.indexOutput]
             if(unspentOutput === undefined) return false
+
             if(unspentOutput.amount < input.amount) return false
             let result = output.amount;
+
             if(unspentOutput.amount > input.amount){
                 const nextOutput = transaction.outputs[i+1]
                 result += nextOutput.amount 
             }
+
             if(result !==  unspentOutput.amount) return false
             const sign = input.scriptSig
             //add address verification
@@ -38,8 +41,6 @@ class TransactionPool {
             )
             if(!isVerified) return false
         }
-        console.log('valid')
-        console.log(this.transactions)
         UnspentTransactions.transactionSpend(transaction)
         return true
     }
@@ -59,7 +60,6 @@ class TransactionPool {
     }
     private pushTransation(transaction: Transaction){
         const require = ["amount","user","password","hash","datetime"]
-        //console.log('------',transaction.getKey)
         this.transactions.push(transaction);
     }
 }
