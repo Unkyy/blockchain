@@ -22,3 +22,8 @@ export const blockChainController = async (req: IncomingMessage, res: ServerResp
     //res.write(JSON.stringify(JSON.stringify(blockChain)))
     res.end()
 }
+
+export const getBlockChainController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
+    res.write(JSON.stringify(JSON.stringify(blockChain)))
+    res.end()
+}

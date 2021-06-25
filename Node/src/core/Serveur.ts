@@ -5,7 +5,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { blockChain} from "../models/BlockChain";
 import { Mining } from "../models/Mining";
 import {EventEmitter} from "events"
-import { blockChainController } from "../controller/blockchain";
+import { blockChainController, getBlockChainController } from "../controller/blockchain";
 import { transactionCreateController, transactiontransferController } from "../controller/transaction";
 
 export class Serveur{
@@ -42,6 +42,9 @@ export class Serveur{
             }
             else if(url[1] === "transaction" && url[2] ==="transfer"){
                 emitter.emit('transaction/transfer',req, res,this.client)
+            }
+            else if(url[1] === "blockchain" && url[2] ==="get"){
+                emitter.emit('transaction/get',req, res,this.client)
             }else {
                 res.statusCode = 404;
                 res.end("404 Not Found");
@@ -55,6 +58,7 @@ export class Serveur{
         app.on('blockchain',blockChainController)
         app.on('transaction/create',transactionCreateController)
         app.on('transaction/transfer',transactiontransferController)
+        app.on('transaction/get',getBlockChainController)
     }
     async handlemining(){
         while(true){
