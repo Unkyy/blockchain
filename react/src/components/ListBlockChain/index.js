@@ -24,20 +24,19 @@ let terms = [{
     divide: 24 * 60 * 60 * 365,
     text: '%d ans'
   }]
-const ListBlockChain = ({json, filter = "date,miner,hash,nonce"}) => {
-    const ref = useRef();
-    // const { dispatch, state } = useContext(AppContext);
-    console.log("listBlock", json)
+const ListBlockChain = ({json, filter = "datetime,miner,hash,nonce", title,texte}) => {
     return <>
+        {title && <h1>{title}</h1>}
+        {texte && <p>{texte}</p>}
         {json && json.length > 0  && <Table data={json.sort((a,b) => {
             const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
             return (cond)
         })} only={filter}>
         {(data, fields) => <Fragment>
-                    {data.map((item, i) => <tr>
-                        {fields.map(field => {
+                    {data.map((item, i) => <tr key={i}>
+                        {fields.map((field,index) => {
                             if(field === "hash" || field === "miner") {
-                                return <Link url={`/${field}/${item[field]}`} name={`${item[field].substring(0,16)}...`} />
+                                return <td key={index}><Link url={`/${field}/${item[field]}`} name={`${item[field].substring(0,16)}...`} /></td>
                             }
                             if(field === "date" || field === "datetime") {
                                 let date = parseInt((new Date(item[field]).getTime() / 1000), 10)
@@ -49,9 +48,9 @@ const ListBlockChain = ({json, filter = "date,miner,hash,nonce"}) => {
                                     break
                                     }
                                 }
-                                return <td>{`${term.text.replace('%d', Math.round(secondes / term.divide))}`}</td>
+                                return <td key={index}>{`${term.text.replace('%d', Math.round(secondes / term.divide))}`}</td>
                             } 
-                            return <td>{`${item[field]}`}</td>
+                            return <td key={index}>{`${item[field]}`}</td>
                         })}
                     </tr>)}
                 </Fragment>}

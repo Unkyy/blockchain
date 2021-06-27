@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.blockChain = exports.BlockChain = void 0;
 var Block_1 = require("./Block");
 var crypto_1 = require("crypto");
 var Mining_1 = require("./Mining");

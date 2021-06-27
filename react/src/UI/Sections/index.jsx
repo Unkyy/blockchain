@@ -7,12 +7,9 @@ import Container from "../Container";
 const Line = styled.section``;
 const FlexItem = styled.div`
     flex: 1;
+    padding: 0 1rem;
 `
-AppContext
 const Section = ({ data, jsonState, ...props }) => {
-  
-  console.log(data);
-  
   return (
     <>
       {data.map((section, i) => {

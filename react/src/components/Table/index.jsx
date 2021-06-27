@@ -67,7 +67,7 @@ const Table = ({ children, data = [], title, filter, only}) => {
             <TheadStyle>
                 <tr>
                     {
-                        Field && Field.map(td => <td>{td}</td>)
+                        Field && Field.map((td,i) => <td key={i}>{td}</td>)
                     }
                 </tr>
             </TheadStyle>
