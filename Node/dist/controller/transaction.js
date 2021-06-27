@@ -57,11 +57,11 @@ exports.transactionCreateController = function (req, res, client) { return __awa
         return [2 /*return*/];
     });
 }); };
-exports.transactiontransferController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
+exports.transactionTransferController = function (req, res, client) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         req.on('data', function (chunk) {
             var data = JSON.parse(chunk.toString());
-            console.log(data);
+            console.log('get');
             if (TransationPool_1.default.addTransaction(data)) {
                 console.log('good');
                 client.sendAllPeer(data, "/transaction/transfer");

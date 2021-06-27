@@ -14,6 +14,7 @@ export class BlockChain {
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
         //add transaction !
+        
         unspentTransactions.addTransactions(block.transactions)
         return this.addBlock(block)
         //return false

@@ -65,36 +65,38 @@ var Serveur = /** @class */ (function () {
             req.on('error', function (err) {
                 console.log('server error:', err);
             });
-            var url = req.url ? req.url.split('/') : "";
-            if (url === "") {
-                res.statusCode = 404;
-                res.end("404 Not Found");
-            }
-            else if (req.method === "OPTIONS") {
-                res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type');
-            }
-            else if (url[1] === "blockchain") {
-                emitter.emit('blockchain', req, res, _this.client);
-            }
-            else if (url[1] === "transaction" && url[2] === "create") {
-                emitter.emit('transaction/create', req, res, _this.client);
-            }
-            else if (url[1] === "transaction" && url[2] === "transfer") {
-                emitter.emit('transaction/transfer', req, res, _this.client);
-            }
-            else {
-                res.statusCode = 404;
-                res.end("404 Not Found");
-            }
+            var url = req.url ? req.url : "";
+            emitter.emit(url, req, res, _this.client);
+            // if(url ===""){
+            //     res.statusCode = 404;
+            //     res.end("404 Not Found");
+            // }else if(req.method === "OPTIONS"){
+            //     res.setHeader('Acces-Control-Allow-Headers', 'Accept, Content-Type')
+            // }
+            // else if(url === "/transaction/create"){
+            //     emitter.emit('/transaction/create',req, res,this.client)
+            // }
+            // else if(url === "/transaction/transfer"){
+            //     emitter.emit('transaction/transfer',req, res,this.client)
+            // }
+            // else if(url === "/blockchain/get"){
+            //     emitter.emit('/blockchain/get',req, res,this.client)
+            // }else if(url === "/blockchain"){
+            //     emitter.emit('/blockchain',req, res,this.client)
+            // }else {
+            //     res.statusCode = 404;
+            //     res.end("404 Not Found");
+            // }
         })
             .listen(this.port, function () { return console.log("running on  port : " + _this.port); });
         return emitter;
     };
     Serveur.prototype.launch = function () {
         var app = this.App();
-        app.on('blockchain', blockchain_1.blockChainController);
-        app.on('transaction/create', transaction_1.transactionCreateController);
-        app.on('transaction/transfer', transaction_1.transactiontransferController);
+        app.on('/blockchain', blockchain_1.blockChainController);
+        app.on('/blockchain/get', blockchain_1.getBlockChainController);
+        app.on('/transaction/create', transaction_1.transactionCreateController);
+        app.on('/transaction/transfer', transaction_1.transactionTransferController);
     };
     Serveur.prototype.handlemining = function () {
         return __awaiter(this, void 0, void 0, function () {
