@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PeerList = void 0;
 var PeerList = /** @class */ (function () {
     function PeerList(peers) {
         this.peers = [];

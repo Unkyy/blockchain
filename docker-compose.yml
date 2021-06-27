@@ -43,6 +43,7 @@ services:
     volumes:
       - "./react:/usr/src/app/"
     command: yarn start
+    # command: tail -f /dev/null
     ports:
       - "3000:3000"
   mongodb:
