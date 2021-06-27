@@ -2,6 +2,8 @@ import { Block } from "./Block"
 import { createHash } from "crypto";
 import { Mining } from "./Mining";
 import wallet from "./Wallet";
+import unspentTransactions from "./UnspentTransactions";
+import TransationPool from "./TransationPool";
 
 export class BlockChain {
     private blocks: Array<Block> = []
@@ -12,6 +14,7 @@ export class BlockChain {
         //if(blocks.length <= this.blocks.length) return false
         //this.blocks = blocks
         //add transaction !
+        unspentTransactions.addTransactions(block.transactions)
         return this.addBlock(block)
         //return false
        // return true
@@ -50,9 +53,13 @@ export class BlockChain {
     }
     addBlock(block: Block): boolean{
         if(!this.validblock(block)) return false
+        unspentTransactions.addTransactions(block.transactions)
         this.blocks.push(block)
         console.log('block ',createHash('sha256').update(JSON.stringify(this.blocks)).digest("hex"));
         console.log(blockChain.length())
+        console.log("size transactions",blockChain.getLastBlock().transactions.length)
+        console.log("size pool", TransationPool.getTransactionPool().length)
+
         wallet.getMoney()
         return true 
     }

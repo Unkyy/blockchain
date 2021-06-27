@@ -15,24 +15,29 @@ class TransactionPool {
             const unspentTransact = unspentTransacts
                 .find(transactions => transactions.hash === input.txHash)
             if(unspentTransact === undefined) return false
+            console.log("1")
             const unspentOutput = unspentTransact.outputs[input.indexOutput]
             if(unspentOutput === undefined) return false
-
+            console.log("2")
             if(unspentOutput.amount < input.amount) return false
             let result = output.amount;
-
+            console.log("3")
             if(unspentOutput.amount > input.amount){
                 const nextOutput = transaction.outputs[i+1]
                 result += nextOutput.amount 
             }
-
+            console.log("4")
             if(result !==  unspentOutput.amount) return false
             const sign = input.scriptSig
             //add address verification
             if(!output.publicKey) return false
+            console.log("4")
+
             const address = getHash(output.publicKey)
             if(input.address !== address) return false
+            console.log("4")  
             if(sign === undefined) return false
+            console.log("4")
             delete input.scriptSig
             const hash = getHash(JSON.stringify([input,output]))
             const isVerified = crypto.verify(
@@ -64,3 +69,5 @@ class TransactionPool {
     }
 }
 export default new TransactionPool()
+
+
