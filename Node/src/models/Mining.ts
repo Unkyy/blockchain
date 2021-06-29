@@ -20,12 +20,7 @@ export class Mining {
     static zero: string = howManyZero();
     constructor(){
         this.block = new Block(new Date,"0")
-        this.block.miner = createHash('sha256').update(wallet.getRandPublicKey()).digest("hex");
-        if(blockChain.length() > 0){
-            let year = new Date(blockChain.getFirstBlock().datetime).getFullYear()
-            let yeaNow = new Date().getFullYear()
-            this.block.reward /=  Math.pow(2, year - yeaNow)
-        }       
+        this.block.miner = createHash('sha256').update(wallet.getRandPublicKey()).digest("hex");    
     }
     async findHash(){
         this.block.preHash  =  blockChain.getLastBlock().hash ? blockChain.getLastBlock().hash : "0"
@@ -38,6 +33,7 @@ export class Mining {
         transationPool.addTransaction(new TransactionReward(output))
         //console.log(transationPool)
         while(!Mining.validHash(hash)){
+            this.block.blockReward()
             this.block.incrementNonce()
             this.block.transactions = transationPool.getTransactionPool()
             hash = createHash('sha256').update(JSON.stringify(this.block)).digest("hex");
@@ -45,6 +41,7 @@ export class Mining {
             //console.log(this.block)
             //console.log(hash)
         }
+        console.log(this.block.reward)
         transationPool.resetTransactionPool()
         this.block.hash = hash
         return this.block
