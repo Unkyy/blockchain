@@ -22,7 +22,7 @@ export class Mining {
         this.block = new Block(new Date,"0")
         this.block.miner = createHash('sha256').update(wallet.getRandPublicKey()).digest("hex");
         if(blockChain.length() > 0){
-            let year = new Date(blockChain.getFirstBlock().date).getFullYear()
+            let year = new Date(blockChain.getFirstBlock().datetime).getFullYear()
             let yeaNow = new Date().getFullYear()
             this.block.reward /=  Math.pow(2, year - yeaNow)
         }       
