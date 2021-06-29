@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Transaction = void 0;
 var Wallet_1 = require("./Wallet");
 var util = require('util');
 var Transaction = /** @class */ (function () {
