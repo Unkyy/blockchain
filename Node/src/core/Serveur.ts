@@ -7,6 +7,7 @@ import { Mining } from "../models/Mining";
 import {EventEmitter} from "events"
 import { blockChainController, getBlockChainController } from "../controller/blockchain";
 import { transactionCreateController, transactionTransferController } from "../controller/transaction";
+import { getWalletController } from "../controller/wallet";
 
 export class Serveur{
     mining = false;
@@ -58,6 +59,7 @@ export class Serveur{
         app.on('/blockchain/get',getBlockChainController)
         app.on('/transaction/create',transactionCreateController)
         app.on('/transaction/transfer',transactionTransferController)
+        app.on('/wallet/get',getWalletController)
     }
     async handlemining(){
         while(true){
