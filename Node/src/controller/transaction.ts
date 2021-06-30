@@ -2,7 +2,6 @@ import { IncomingMessage, ServerResponse } from "http"
 import { Client } from "../core/Client"
 import { Transaction } from "../models/Transaction"
 import { TransactionRequest } from "../models/TransactionRequest"
-import TransationPool from "../models/TransationPool"
 import transactionPool from "../models/TransationPool"
 const util = require('util')
 
@@ -29,5 +28,9 @@ export const transactionTransferController = async (req: IncomingMessage, res: S
             client.sendAllPeer(data,"/transaction/transfer")
         }
     })
+    res.end()
+}
+export const getTransactionController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
+    res.write(JSON.stringify(transactionPool))
     res.end()
 }
