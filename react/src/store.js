@@ -16,6 +16,10 @@ const StateProvider = ( { children } ) => {
         ...state,
         dataJson: action.dataJson
       };
+      case 'UPDATE_TRANSACTION':
+      return {
+        data: [ ...state, action.dataTransac]
+      };
       default:
         throw new Error();
     };
