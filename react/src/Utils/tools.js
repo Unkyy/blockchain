@@ -65,7 +65,7 @@ export const Timer = () => {
 
 }
 
-export const dataJson = async (callback) => {
+export const dataJson = async (url,callback) => {
   const data = await fetch('http://localhost:5000/blockchain/get');
   const response = await data.json();
   callback && callback(response);
