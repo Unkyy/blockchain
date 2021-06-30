@@ -6,8 +6,12 @@ class UnspentTransactions {
     constructor(){
 
     }
-    addTransactions(transactions:  Array<Transaction>){
+    addTransactions(transactions:  Array<Transaction>): boolean{
+        const validTransations = transactions.some((transaction: Transaction) => Transaction.validTransaction(transaction));
+        if(!validTransations) return false;
+        console.log('transaction valid',validTransations)
         this.transactions = [...this.transactions, ...transactions];
+        return true;
     }
     getTransactions(){
         return this.transactions;
@@ -18,7 +22,7 @@ class UnspentTransactions {
                 .findIndex(elem =>{
                     return elem.hash === input.txHash
                 })
-            //if(transactIndex === -1) return
+            if(transactIndex === -1) console.log("faux")
             this.transactions[transactIndex].outputs.splice(input.indexOutput)
         })
     }
