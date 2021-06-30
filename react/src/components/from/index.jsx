@@ -2,8 +2,7 @@ import React, {Fragment, useRef} from "react";
 import crypto from "crypto"
 
 
-const Form = ({json}) => {
-    console.log("json",json)
+const Form = () => {
     const coins = useRef()
     const toAddress = useRef()
     const passphrase = useRef()
