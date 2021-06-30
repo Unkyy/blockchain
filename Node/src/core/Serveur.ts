@@ -6,7 +6,7 @@ import { blockChain} from "../models/BlockChain";
 import { Mining } from "../models/Mining";
 import {EventEmitter} from "events"
 import { blockChainController, getBlockChainController } from "../controller/blockchain";
-import { transactionCreateController, transactionTransferController } from "../controller/transaction";
+import { getTransactionController, transactionCreateController, transactionTransferController } from "../controller/transaction";
 import { getWalletController } from "../controller/wallet";
 
 export class Serveur{
@@ -59,6 +59,7 @@ export class Serveur{
         app.on('/blockchain/get',getBlockChainController)
         app.on('/transaction/create',transactionCreateController)
         app.on('/transaction/transfer',transactionTransferController)
+        app.on('/transaction/get',getTransactionController)
         app.on('/wallet/get',getWalletController)
     }
     async handlemining(){
