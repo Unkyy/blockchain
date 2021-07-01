@@ -95,7 +95,7 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
     return <>
         {title && <h1>{title}</h1>}
         {texte && <p>{texte}</p>}
-        {Object.keys(json) && Object.keys(json).length > 0  && <Table data={Object.keys(json).filter(filt => (filt !== "transactions" || filt !== "outputs" || filt !== "inputs")).map(hash => ({hash, value: json[hash]})).sort((a,b) => {
+        {Object.keys(json) && Object.keys(json).length > 0  && <Table data={Object.keys(json).filter(filt => (filt !== "transactions" && filt !== "outputs" && filt !== "inputs")).map(hash => ({hash, value: json[hash]})).sort((a,b) => {
             const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
             return (cond)
         })} only={filter}>
