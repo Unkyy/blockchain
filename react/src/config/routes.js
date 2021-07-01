@@ -35,6 +35,13 @@ export const routes = [
           path: `/hash/:hash`,
           component: Block,
         },
+
+        {
+          exact: true,
+          init: false,
+          path: `/transac/:hash`,
+          component: Block,
+        },
         
         {
           exact: true,

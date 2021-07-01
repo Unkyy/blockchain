@@ -3,8 +3,13 @@ import Section from '../../UI/Sections';
 import { AppContext } from "../../store";
 import { Form, LineChart, ListBlock, ListBlockChain } from "../../components/index";
 const Block = (props) => {
+    let title = "Latest Blocks";
     const { dispatch, state } = useContext(AppContext);
-    const [value]  = state?.dataJson?.blocks ? state?.dataJson?.blocks.filter(item => item.hash === props.match.params.hash) : []
+    let [value]  = state?.dataJson?.blocks ? state?.dataJson?.blocks.filter(item => item.hash === props.match.params.hash) : []
+    if (!value) {
+      title = "Transaction";
+      [value] = state?.dataTransac? state?.dataTransac.filter(item => item.hash === props.match.params.hash) : []
+    }
     console.log("block",value, state)
     const data = [
         {
@@ -12,8 +17,7 @@ const Block = (props) => {
           data: [
             {
               component: ListBlock,
-              title: "Latest Blocks",
-              texte: "The most recently mined blocks",
+              title: title,
               json: value,
             }
           ],

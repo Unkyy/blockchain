@@ -95,7 +95,7 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
     return <>
         {title && <h1>{title}</h1>}
         {texte && <p>{texte}</p>}
-        {Object.keys(json) && Object.keys(json).length > 0  && <Table data={Object.keys(json).filter(filt => filt !== "transactions").map(hash => ({hash, value: json[hash]})).sort((a,b) => {
+        {Object.keys(json) && Object.keys(json).length > 0  && <Table data={Object.keys(json).filter(filt => (filt !== "transactions" || filt !== "outputs" || filt !== "inputs")).map(hash => ({hash, value: json[hash]})).sort((a,b) => {
             const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
             return (cond)
         })} only={filter}>
@@ -103,7 +103,7 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
                     {data.map((item, i) => <tr key={i}>
                         {fields.map((field,index) => {
                           console.log(item[field])
-                            if(field === "date" || field === "datetime") {
+                            if(field === "date" || field === "datetime" ) {
                                 let date = parseInt((new Date(item[field]).getTime() / 1000), 10)
                                 let secondes = Math.floor((new Date()).getTime() / 1000 - date)
                                 let term = null
@@ -141,6 +141,22 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
             </ElementChild>
           </ElementParent>
           </>)}
+        </> }
+        {json?.outputs && <>
+            
+            
+          <ElementParent>
+          <ElementChild>
+          {json.inputs.length > 0 ? json.inputs.map(transac => <ElementChildChild><InsideLeft>Hash</InsideLeft>
+              <InsideRight>{transac.toAddress} <br/> {transac.amount}</InsideRight>
+              </ElementChildChild>
+            ) : <ElementChildChild><InsideLeft>Reward</InsideLeft></ElementChildChild>}
+            {json.outputs.map(transac => <ElementChildChild><InsideLeft><svg enable-background="new 0 0 32 32" height="32px" id="svg2" version="1.1" viewBox="0 0 32 32" width="32px" class="sc-1ub63u6-0 hDAkGl"><g id="background"><rect fill="none" height="32" width="32"></rect></g><g id="arrow_x5F_full_x5F_right"><polygon points="16,2.001 16,10 2,10 2,22 16,22 16,30 30,16  "></polygon></g></svg></InsideLeft>
+              <InsideRight>{transac.toAddress} <br/> <br/> amount:  {transac.amount}</InsideRight>
+              </ElementChildChild>
+            )}
+            </ElementChild>
+          </ElementParent>
         </> }
     </>
 } 
