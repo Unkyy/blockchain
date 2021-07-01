@@ -97,7 +97,7 @@ const ListWallet = ({json, filter = "datetime,miner,value,hash,nonce", title,tex
     return <>
         {title && <h1>{title}</h1>}
         {texte && <p>{texte}</p>}
-        {json && <>
+        {json?.KeysPair && <>
           {json.KeysPair.map((transac, index) =><>
             <ElementParent>
              <ElementChild>
