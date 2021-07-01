@@ -32,7 +32,7 @@ const Transaction = (props) => {
     });
 
     const datat = labels.map((item, i) => {
-      const data = JSON.parse(localStorage.getItem('transac')).sort((a,b) => {
+      const data = JSON.parse(localStorage.getItem('transac')) && JSON.parse(localStorage.getItem('transac')).length > 0  && JSON.parse(localStorage.getItem('transac')).sort((a,b) => {
           const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
           return (cond)
       }).filter(elem => {
@@ -49,7 +49,7 @@ const Transaction = (props) => {
               }
           }
       });
-      return data.length;
+      return data && data.length;
   });
     
   const data = [
@@ -95,6 +95,7 @@ const Transaction = (props) => {
     dataJson((response) => {
       if(localStorage.getItem('response') &&  localStorage.getItem('response') !== JSON.stringify(response)) {
           localStorage.setItem('response',JSON.stringify(response));
+          console.log('called prev ajax')
           setPrev(response);
           return dispatch({ type: "UPDATE_JSON", dataJson: response });
       }
@@ -114,19 +115,20 @@ const Transaction = (props) => {
 
 
   useEffect(() => {
-    dataJson((response) => {
-      const newState = [...state.dataTransac];
-      const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
-        console.log(item.hash, response.transactions[0].hash);
-        if(item.hash === response.transactions[0].hash) {
-          return item;
-        }
-      });
-     if(filter === undefined) {
-      localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
-      return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
-     }
-  }, "transaction/get");
+    console.log('called prev')
+      dataJson((response) => {
+        const newState = [...state.dataTransac];
+        const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
+          console.log('conditions',item.hash, response.transactions[0].hash, item.hash === response.transactions[0].hash);
+          if(item.hash === response.transactions[0].hash) {
+            return item;
+          }
+        });
+      if(filter === undefined) {
+        localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
+        return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
+      }
+    }, "transaction/get");
   }, [prev])
 
   return <Section data={data} jsonState={state} />;

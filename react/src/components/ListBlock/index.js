@@ -128,8 +128,7 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
               <ElementChildChild><InsideLeft>Hash</InsideLeft> <InsideRight>{transac.hash}</InsideRight></ElementChildChild>
             </ElementChild>
             
-          </ElementParent>
-          <ElementParent>
+         
           <ElementChild>
           {json.transactions[index].inputs.length > 0 ? json.transactions[index].inputs.map(transac => <ElementChildChild><InsideLeft>Hash</InsideLeft>
               <InsideRight>{transac.toAddress}</InsideRight>
