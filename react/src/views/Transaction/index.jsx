@@ -92,7 +92,20 @@ const Transaction = (props) => {
     },
   ];
    async function ajaxInter() {
-    dataJson((response) => {
+    await dataJson((response) => {
+      const newState = [...state.dataTransac];
+      const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
+        console.log('conditions',item.hash, response.transactions[0].hash, item.hash === response.transactions[0].hash);
+        if(item.hash === response.transactions[0].hash) {
+          return item;
+        }
+      });
+    if(filter === undefined) {
+      localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
+      return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
+    }
+  }, "transaction/get");
+    await dataJson((response) => {
       if(localStorage.getItem('response') &&  localStorage.getItem('response') !== JSON.stringify(response)) {
           localStorage.setItem('response',JSON.stringify(response));
           console.log('called prev ajax')
@@ -100,36 +113,31 @@ const Transaction = (props) => {
           return dispatch({ type: "UPDATE_JSON", dataJson: response });
       }
     });
-    const time = window.setTimeout(() => {
-      if (window.requestAnimationFrame) {
-        window.requestAnimationFrame(ajaxInter)
-      } else {
-        ajaxInter()
-      }
-      clearTimeout(time)
-    }, 5000)
+
+    
+    ajaxInter();
   }
   useEffect(() => {
     ajaxInter();
   }, []);
 
 
-  useEffect(() => {
-    console.log('called prev')
-      dataJson((response) => {
-        const newState = [...state.dataTransac];
-        const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
-          console.log('conditions',item.hash, response.transactions[0].hash, item.hash === response.transactions[0].hash);
-          if(item.hash === response.transactions[0].hash) {
-            return item;
-          }
-        });
-      if(filter === undefined) {
-        localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
-        return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
-      }
-    }, "transaction/get");
-  }, [prev])
+  // useEffect(() => {
+  //   console.log('called prev')
+  //     dataJson((response) => {
+  //       const newState = [...state.dataTransac];
+  //       const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
+  //         console.log('conditions',item.hash, response.transactions[0].hash, item.hash === response.transactions[0].hash);
+  //         if(item.hash === response.transactions[0].hash) {
+  //           return item;
+  //         }
+  //       });
+  //     if(filter === undefined) {
+  //       localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
+  //       return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
+  //     }
+  //   }, "transaction/get");
+  // }, [prev])
 
   return <Section data={data} jsonState={state} />;
 };

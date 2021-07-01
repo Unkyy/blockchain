@@ -6,11 +6,13 @@ import { Form, LineChart, Table, ListWallet } from "../../components/index";
 const Wallet = () => {
     const { dispatch, state } = useContext(AppContext);
     console.log(state);
-    dataJson((response) => {
-        console.log('wallet')
-            localStorage.setItem('wallets',JSON.stringify(response));
-            return dispatch({ type: "UPDATE_WALLET", dataWallet: response });
-      }, "wallet/get");
+    useEffect(() => {
+        dataJson((response) => {
+            console.log('wallet')
+                localStorage.setItem('wallets',JSON.stringify(response));
+                return dispatch({ type: "UPDATE_WALLET", dataWallet: response });
+          }, "wallet/get");
+    },[])
     const data = [
         
         {
