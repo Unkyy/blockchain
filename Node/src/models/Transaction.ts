@@ -69,9 +69,11 @@ export class Transaction {
                 'RSA-SHA256',Buffer.from(hash, 'utf8'),
                 output.publicKey,Buffer.from(sign, 'base64')
             )
+            input.scriptSig = sign
+            console.log('sig : ', isVerified)
             if(!isVerified) return false
+            console.log('good')
         }
-        console.log('test')
         return true
     }
 }

@@ -3,6 +3,7 @@ import { Client } from "../core/Client"
 import { Transaction } from "../models/Transaction"
 import { TransactionRequest } from "../models/TransactionRequest"
 import transactionPool from "../models/TransationPool"
+import UnspentTransactions from "../models/UnspentTransactions"
 const util = require('util')
 
 
@@ -11,8 +12,8 @@ export const transactionCreateController = async (req: IncomingMessage, res: Ser
         const data = JSON.parse(chunk.toString())
         data.amount =  parseFloat(data.amount)
         const transaction = new TransactionRequest(data)
-        console.log(transaction)
         if(transactionPool.addTransaction(transaction)){
+            UnspentTransactions.transactionSpend(transaction)
             client.sendAllPeer(transaction,"/transaction/transfer")
         }
     })
@@ -21,11 +22,10 @@ export const transactionCreateController = async (req: IncomingMessage, res: Ser
 
 export const transactionTransferController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
     req.on('data',(chunk: Buffer) => {
-        const data: Transaction = JSON.parse(chunk.toString())
-        console.log('get')
-        if(transactionPool.addTransaction(data)){
-            console.log('good')
-            client.sendAllPeer(data,"/transaction/transfer")
+        const transaction: Transaction = JSON.parse(chunk.toString())
+        if(transactionPool.addTransaction(transaction)){
+                UnspentTransactions.transactionSpend(transaction)
+            client.sendAllPeer(transaction,"/transaction/transfer")
         }
     })
     res.end()

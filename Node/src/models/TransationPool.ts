@@ -8,7 +8,6 @@ const crypto = require("crypto");
 class TransactionPool {
     private transactions: Array<Transaction> = []
     addTransaction(transaction: Transaction): boolean{
-        UnspentTransactions.transactionSpend(transaction)
         if(Transaction.validTransaction(transaction)){
             this.pushTransation(transaction)
             return true
