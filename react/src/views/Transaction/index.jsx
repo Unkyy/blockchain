@@ -92,6 +92,7 @@ const Transaction = (props) => {
     },
   ];
    async function ajaxInter() {
+     const test = [];
     await dataJson((response) => {
       const newState = [...state.dataTransac];
       const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
@@ -107,8 +108,10 @@ const Transaction = (props) => {
   }, "transaction/get");
     await dataJson((response) => {
       if(localStorage.getItem('response') &&  localStorage.getItem('response') !== JSON.stringify(response)) {
+          const newState = [...state.dataTransac];
+          const transaction = response.blocks.map(item => [...item.transactions])
+          transaction.map(tr => tr.map(t => test.push(t)));
           localStorage.setItem('response',JSON.stringify(response));
-          console.log('called prev ajax')
           setPrev(response);
           return dispatch({ type: "UPDATE_JSON", dataJson: response });
       }

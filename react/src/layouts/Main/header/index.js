@@ -41,7 +41,7 @@ const Header = () => {
             <Fragment key={i}>
               {link.init  && (
                 <li>
-                  <Link to={link.path}>{`${link.name ? link.name : link.path.replace("/", "")}`}</Link>
+                  <a href={link.path}>{`${link.name ? link.name : link.path.replace("/", "")}`}</a>
                 </li>
               )}
             </Fragment>
