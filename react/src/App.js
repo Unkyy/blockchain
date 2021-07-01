@@ -31,6 +31,7 @@ const DynamicRoute = ({ route, ...props }) => {
     </route.layout>
   );
 };
+
 function App() {
   console.log("test de refresh")
   

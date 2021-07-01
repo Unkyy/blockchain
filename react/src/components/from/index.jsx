@@ -1,8 +1,10 @@
-import React, {Fragment, useRef} from "react";
+import React, {Fragment, useRef, useContext} from "react";
 import crypto from "crypto"
-
+import { AppContext } from "../../store";
+import { dataJson } from "../../Utils/tools";
 
 const Form = () => {
+    const { dispatch, state } = useContext(AppContext);
     const coins = useRef()
     const toAddress = useRef()
     const passphrase = useRef()
@@ -36,6 +38,14 @@ const Form = () => {
         //console.log(myInit)
 
         fetch('http://localhost:5000/transaction/create', myInit).then(rep => {
+            dataJson((response) => {
+                const newState = [...state.dataTransac];
+                const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => item.hash );
+                if(filter === undefined) {
+                    localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
+                    return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
+                }
+            }, "transaction/get");
             //console.log(rep)
         })
 

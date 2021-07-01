@@ -91,7 +91,7 @@ let terms = [{
     text: '%d ans'
   }]
 const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,texte, ...props}) => {
-  console.log(json.transactions[0])
+  console.log("filterBlock",json)
     return <>
         {title && <h1>{title}</h1>}
         {texte && <p>{texte}</p>}
@@ -122,24 +122,26 @@ const ListBlock = ({json, filter = "datetime,miner,value,hash,nonce", title,text
         </Table>}
 
         {json?.transactions && <>
-          <ElementParent>
-            {json.transactions.map(transac => <ElementChild>
+          {json.transactions.map((transac,index) => <>
+            <ElementParent>
+             <ElementChild>
               <ElementChildChild><InsideLeft>Hash</InsideLeft> <InsideRight>{transac.hash}</InsideRight></ElementChildChild>
-            </ElementChild>)}
+            </ElementChild>
             
           </ElementParent>
           <ElementParent>
           <ElementChild>
-          {json.transactions[0].inputs.length > 0 ? json.transactions[0].inputs.map(transac => <ElementChildChild><InsideLeft>Hash</InsideLeft>
+          {json.transactions[index].inputs.length > 0 ? json.transactions[index].inputs.map(transac => <ElementChildChild><InsideLeft>Hash</InsideLeft>
               <InsideRight>{transac.toAddress}</InsideRight>
               </ElementChildChild>
             ) : <ElementChildChild><InsideLeft>Reward</InsideLeft></ElementChildChild>}
-            {json.transactions[0].outputs.map(transac => <ElementChildChild><InsideLeft><svg enable-background="new 0 0 32 32" height="32px" id="svg2" version="1.1" viewBox="0 0 32 32" width="32px" class="sc-1ub63u6-0 hDAkGl"><g id="background"><rect fill="none" height="32" width="32"></rect></g><g id="arrow_x5F_full_x5F_right"><polygon points="16,2.001 16,10 2,10 2,22 16,22 16,30 30,16  "></polygon></g></svg></InsideLeft>
+            {json.transactions[index].outputs.map(transac => <ElementChildChild><InsideLeft><svg enable-background="new 0 0 32 32" height="32px" id="svg2" version="1.1" viewBox="0 0 32 32" width="32px" class="sc-1ub63u6-0 hDAkGl"><g id="background"><rect fill="none" height="32" width="32"></rect></g><g id="arrow_x5F_full_x5F_right"><polygon points="16,2.001 16,10 2,10 2,22 16,22 16,30 30,16  "></polygon></g></svg></InsideLeft>
               <InsideRight>{transac.toAddress}</InsideRight>
               </ElementChildChild>
             )}
             </ElementChild>
           </ElementParent>
+          </>)}
         </> }
     </>
 } 

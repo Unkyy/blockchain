@@ -3,7 +3,7 @@ import { AppContext } from "../../store";
 import Section from "../../UI/Sections";
 import { dataJson } from "../../Utils/tools";
 import { Form, LineChart, Table, ListBlockChain } from "../../components/index";
-localStorage.setItem('response',JSON.stringify([]));
+
 const Transaction = (props) => {
     const { dispatch, state } = useContext(AppContext);
     const [prev, setPrev] = useState([]);
@@ -11,7 +11,7 @@ const Transaction = (props) => {
     const labels = [...new Array(20)].map((et,i) => i * minute); 
     const test = [];
     const datas = labels.map((item, i) => {
-        const data = JSON.parse(localStorage.getItem('response')).sort((a,b) => {
+        const data = JSON.parse(localStorage.getItem('response'))?.blocks && JSON.parse(localStorage.getItem('response'))?.blocks.sort((a,b) => {
             const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
             return (cond)
         }).filter(elem => {
@@ -28,8 +28,30 @@ const Transaction = (props) => {
                 }
             }
         });
-        return data.length;
+        return data && data.length;
     });
+
+    const datat = labels.map((item, i) => {
+      const data = JSON.parse(localStorage.getItem('transac')).sort((a,b) => {
+          const cond = a.date ? (new Date(b.date)).getTime() - (new Date(a.date)).getTime() : (new Date(b.datetime)).getTime() - (new Date(a.datetime)).getTime()
+          return (cond)
+      }).filter(elem => {
+          const beforeTime = (i - 1 < 0) ? labels[0] : labels[i - 1];
+          let date = parseInt((new Date(elem.datetime).getTime() / 1000), 10)
+          let secondes = Math.floor((new Date()).getTime() / 1000 - date);
+          if(i === 0 ) {
+              if(secondes < beforeTime) {
+                  return elem;
+              }
+          } else {
+              if (secondes > beforeTime && secondes < item) {
+                  return elem
+              }
+          }
+      });
+      return data.length;
+  });
+    
   const data = [
     {
       flexDisplay: true,
@@ -43,7 +65,7 @@ const Transaction = (props) => {
         },
         {
             component: LineChart,
-            data: datas,
+            data: datat,
             labels: labels,
             backgroundColor: "#dff5fa",
             borderColor: "rgba(80, 207, 231,1)",
@@ -64,41 +86,48 @@ const Transaction = (props) => {
           title: "Latest Transactions",
           texte: "The most recently published unconfirmed transactions",
           filter: "hash,datetime",
-          json: state?.dataJson?.blocks
-            ? state?.dataJson?.blocks.map((item) => item.transactions[0])
-            : [],
+          json: state?.dataTransac,
         },
       ],
     },
   ];
-  function ajaxInter() {
-    let called = true;
-    if (!called) return;
-    const lastPrev = [...prev];
-
-    
+   async function ajaxInter() {
     dataJson((response) => {
-        console.log(lastPrev.length !== response?.blocks.length)
-        if(localStorage.getItem('response') &&  JSON.parse(localStorage.getItem('response')).length !== response?.blocks.length) {
-            setPrev(response?.blocks)
-            localStorage.setItem('response',JSON.stringify(response?.blocks));
-            return dispatch({ type: "UPDATE_JSON", dataJson: response });
-        }
-    });
-    const time = window.setTimeout(function () {
-      if (window.requestAnimationFrame) {
-        window.requestAnimationFrame(ajaxInter);
-      } else {
-        ajaxInter();
+      if(localStorage.getItem('response') &&  localStorage.getItem('response') !== JSON.stringify(response)) {
+          localStorage.setItem('response',JSON.stringify(response));
+          setPrev(response);
+          return dispatch({ type: "UPDATE_JSON", dataJson: response });
       }
-      called = true;
-      clearTimeout(time);
-    }, 5 * 1000);
-    called = false;
+    });
+    const time = window.setTimeout(() => {
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(ajaxInter)
+      } else {
+        ajaxInter()
+      }
+      clearTimeout(time)
+    }, 5000)
   }
   useEffect(() => {
     ajaxInter();
   }, []);
+
+
+  useEffect(() => {
+    dataJson((response) => {
+      const newState = [...state.dataTransac];
+      const [filter] = JSON.parse(localStorage.getItem('transac')).filter(item => {
+        console.log(item.hash, response.transactions[0].hash);
+        if(item.hash === response.transactions[0].hash) {
+          return item;
+        }
+      });
+     if(filter === undefined) {
+      localStorage.setItem('transac',JSON.stringify([...newState, ...response?.transactions]));
+      return dispatch({ type: "UPDATE_TRANSAC", dataTransac: [...newState, ...response?.transactions] });
+     }
+  }, "transaction/get");
+  }, [prev])
 
   return <Section data={data} jsonState={state} />;
 };

@@ -3,6 +3,7 @@ import Main from "../layouts/Main";
 import Block from "../views/Block";
 import Blockchain from "../views/Blockchain";
 import Home from "../views/Home";
+import Wallet from "../views/Wallet";
 import Transaction from "../views/Transaction";
 
 export const routes = [
@@ -11,20 +12,22 @@ export const routes = [
       subRoutes: [
         {
           exact: true,
+          init: true,
+          name: "home",
           path: `/`,
-          component: Home
+          component: Transaction
         },
         {
-          init: true,
+          init: false,
           exact: true,
           path: `/blockchain`,
           component: Blockchain
         },
         {
-          init: true,
           exact: true,
-          path: `/transaction`,
-          component: Transaction,
+          init: true,
+          path: `/wallet`,
+          component: Wallet,
         },
         {
           exact: true,
@@ -32,6 +35,7 @@ export const routes = [
           path: `/hash/:hash`,
           component: Block,
         },
+        
         {
           exact: true,
           init: false,

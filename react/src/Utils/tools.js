@@ -70,5 +70,5 @@ export const dataJson = async (callback,url = "blockchain/get") => {
   const response = await data.json();
   callback && callback(response);
   console.log("called",response);
-  return response;
+  return new Promise(res => ("done"));
 }

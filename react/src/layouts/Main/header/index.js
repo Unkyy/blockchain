@@ -39,9 +39,9 @@ const Header = () => {
         <ul>
           {links[0].map((link, i) => (
             <Fragment key={i}>
-              {link.path !== "/" && link.init  && (
+              {link.init  && (
                 <li>
-                  <Link to={link.path}>{`${link.path.replace("/", "")}`}</Link>
+                  <Link to={link.path}>{`${link.name ? link.name : link.path.replace("/", "")}`}</Link>
                 </li>
               )}
             </Fragment>
