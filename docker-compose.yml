@@ -6,10 +6,23 @@ services:
       - "9001:9001"
     volumes:
       - "./NodesServer:/usr/src/app/"
-    depends_on:
+    links:
       - mongodb
     command: npm start
-    #command: tail -f /dev/null
+    # command: tail -f /dev/null
+  node-react:
+    build: ./docker/node
+    volumes:
+      - "./Node:/usr/src/app/"
+    links:
+      - "node"
+    depends_on:
+      - nodeserver
+    deploy:
+      replicas: 1
+    ports:
+      - "5000:5000"
+    command: npm start
   node:
     build: ./docker/node
     volumes:
@@ -17,13 +30,27 @@ services:
     depends_on:
       - nodeserver
     deploy:
-      replicas: 3
+      replicas: 1
     command: npm start
+    environment: 
+      NODE_ENV: development
+  front-react:
+    build: ./docker/react
+    restart: always
+    depends_on:
+      - nodeserver
+      - node
+    volumes:
+      - "./react:/usr/src/app/"
+    command: yarn start
+    # command: tail -f /dev/null
+    ports:
+      - "3000:3000"
   mongodb:
-    image: "mongo"
+    image: "mongo:latest"
     ports:
       - "27017:27017"
     environment:
-      MONGODB_USERNAME: root
-      MONGO_PASSWORD: root
-      MONGO_DATABASE: halgo
+      MONGO_INITDB_DATABASE: halgo
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test

@@ -1,9 +1,17 @@
 import { Serveur } from "./core/Serveur";
-import { SendIPv4 } from "./core/SendIPv4";
+import { IPv4 } from "./core/IPv4";
+import { PeerList } from "./core/PeersList";
+import { Client } from "./core/Client";
+import  wallet  from "./models/Wallet";
 
-let tetetee = new SendIPv4()
-const fefeef = tetetee.send();
-const test = new Serveur(5000).launch();
-(async ()=>{
-    console.log('-------',await fefeef);
+
+(async() => {
+    let ipv4 = new IPv4()
+    const peers = ipv4.send();
+    const client = new Client(peers);
+    const serveur = new Serveur(5000,client).launch();
+
+    //console.log(wallet.sign("test",publickey))
 })()
+
+
