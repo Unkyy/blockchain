@@ -1,7 +1,7 @@
 # Halgo Cryptocurrency 
 
 ## What is Halgo Cryptocurrency ?
-Halgo Cryptocurrency is a proof of concept of crypto currency like Bitcoin. This Poc take over of the main concept of Cryptocurrency. Docker allows us to recreate a real environement of nodes in P2P network.
+Halgo Cryptocurrency is a proof of concept of crypto currency like Bitcoin. This Poc includes the main concept of Cryptocurrency. Docker allows us to recreate a real environement of nodes in P2P network.
 
 This project contains 4 sub-projects
 > docker
