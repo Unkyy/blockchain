@@ -22,9 +22,11 @@ export const transactionCreateController = async (req: IncomingMessage, res: Ser
 
 export const transactionTransferController = async (req: IncomingMessage, res: ServerResponse, client: Client) => {
     req.on('data',(chunk: Buffer) => {
+        console.log('getransaction')
         const transaction: Transaction = JSON.parse(chunk.toString())
         if(transactionPool.addTransaction(transaction)){
-                UnspentTransactions.transactionSpend(transaction)
+            console.log("get")
+            UnspentTransactions.transactionSpend(transaction)
             client.sendAllPeer(transaction,"/transaction/transfer")
         }
     })

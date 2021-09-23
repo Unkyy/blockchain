@@ -30,7 +30,8 @@ export class Mining {
             toAddress: this.block.miner,
             publicKey:""
         }
-        transationPool.addTransaction(new TransactionReward(output))
+        const reward = new TransactionReward(output)
+        transationPool.addTransaction(reward)
         //console.log(transationPool)
         while(!Mining.validHash(hash)){
             this.block.blockReward()
@@ -41,9 +42,8 @@ export class Mining {
             //console.log(this.block)
             //console.log(hash)
         }
-        console.log(this.block.reward)
-        transationPool.resetTransactionPool()
         this.block.hash = hash
+        transationPool.resetTransactionPool()
         return this.block
     }
     static validHash(hash: string){
