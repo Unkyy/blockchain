@@ -2,9 +2,8 @@
   "name": "blockchain",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "concurrently --kill-others \"tsc -w\" \"nodemon  --stack-size=32000 dist/node.js\""
   },
   "author": "Hugo Alberola",
@@ -13,6 +12,7 @@
     "concurrently": "^5.3.0",
     "crypto-js": "^4.0.0",
     "express": "^4.17.1",
+    "jest": "^27.1.0",
     "mongodb": "^3.6.3",
     "nodemon": "^2.0.7",
     "peer": "^0.6.1",
@@ -20,8 +20,14 @@
     "socket.io-p2p-server": "^1.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-typescript": "^7.15.0",
     "@types/express": "^4.16.1",
+    "@types/jest": "^27.0.1",
     "@types/node": "^14.14.37",
+    "babel-jest": "^27.1.0",
+    "ts-jest": "^27.0.5",
     "ts-node": "^9.1.1",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
